@@ -334,7 +334,7 @@ public class GameManager : MonoBehaviour
         var transitions = new Dictionary<string, (Vector2 min, Vector2 max, string targetScene)[]>
         {
             { "Cena1", new[] { (new Vector2(-1.909972f, 34.06695f), new Vector2(1.910001f, 34.06695f), "Cena2") } },
-            { "Cena2", new[] { (new Vector2(-0.9350259f, 15.53006f), new Vector2(0.935003f, 15.53006f), "Cena5"),
+            { "Cena2", new[] { (new Vector2(-0.9350259f, 15.52005f), new Vector2(0.935003f, 15.52005f), "Cena5"),
                                (new Vector2(-6.335011f, 8.068845f), new Vector2(-6.335011f, 8.935001f), "Cena3"),
                                (new Vector2(6.308114f, 8.064985f), new Vector2(6.308114f, 8.935001f), "Cena4") } },
             { "Cena3", new[] { (new Vector2(6.652393f, -1.935015f), new Vector2(6.652393f, -1.208376f), "Cena2") } },

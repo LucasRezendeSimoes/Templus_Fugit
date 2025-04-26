@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movimentação e Interação")]
     public float moveSpeed = 5f;
+    private Vector2 _velocity;
     public float interactionRange = 2f;
     public LayerMask interactableLayer;
 
@@ -63,7 +64,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (!canMove) return;
+        if (!canMove)
+        {
+            _velocity = Vector2.zero;
+            return;
+        }
 
         HandleMovement();
         HandleFire();
@@ -114,18 +119,20 @@ public class PlayerController : MonoBehaviour
                 animator.runtimeAnimatorController = paradoDireita;
         }
 
+        _velocity = dir.normalized * moveSpeed;
+
+
         if (dir != Vector2.zero)
             _lastFacing = dir.normalized;
 
-        float dt = Time.unscaledDeltaTime;
-        Vector2 movement = dir.normalized * moveSpeed * dt;
+        // calcula a nova posição
+        Vector2 newPos = rb2d.position + _velocity * Time.fixedDeltaTime;
 
-        Vector3 newPos = transform.position + new Vector3(movement.x, movement.y, 0f);
-
+        // opcional: mantém dentro dos limites do cenário
         newPos.x = Mathf.Clamp(newPos.x, boundXEsquerda, boundXDireita);
         newPos.y = Mathf.Clamp(newPos.y, boundYBaixo, boundYCima);
 
-        transform.position = newPos;
+        rb2d.MovePosition(newPos);
     }
 
     private void HandleFire()

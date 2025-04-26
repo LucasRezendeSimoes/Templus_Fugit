@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      brasa_bami_0: -4826833776709423308
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

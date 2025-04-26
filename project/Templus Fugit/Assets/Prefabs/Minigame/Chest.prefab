@@ -150,8 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chestID: chest_templo_01
   lockpickUI: {fileID: 0}
-  difficulty: 2
-  coinReward: 10
+  difficulty: 0
+  coinReward: 100
 --- !u!50 &2955962061354973934
 Rigidbody2D:
   serializedVersion: 4

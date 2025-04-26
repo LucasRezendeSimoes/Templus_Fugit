@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      slot_bami_ember_0: 2281954404962886784
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

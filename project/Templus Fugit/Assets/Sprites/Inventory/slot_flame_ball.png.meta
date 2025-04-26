@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      slot_flame_ball_0: -6527882750063429571
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
