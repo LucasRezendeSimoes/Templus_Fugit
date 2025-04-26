@@ -60,7 +60,7 @@ MonoBehaviour:
   hourglassBonusTime: 30
   brokenWatchDuration: 10
   cloakDuration: 5
-  flameBallIcon: {fileID: 2281954404962886784, guid: 6a7d7a21a106c6d4c937fa760e58307d, type: 3}
+  flameBallIcon: {fileID: -6527882750063429571, guid: 1d04154192038724cba3b0c06b48344c, type: 3}
   coinCount: 0
   heartsUI:
   - {fileID: 0}

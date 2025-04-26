@@ -14710,7 +14710,7 @@ PrefabInstance:
     - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
       propertyPath: flameBallIcon
       value: 
-      objectReference: {fileID: 2281954404962886784, guid: 6a7d7a21a106c6d4c937fa760e58307d, type: 3}
+      objectReference: {fileID: -6527882750063429571, guid: 1d04154192038724cba3b0c06b48344c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
