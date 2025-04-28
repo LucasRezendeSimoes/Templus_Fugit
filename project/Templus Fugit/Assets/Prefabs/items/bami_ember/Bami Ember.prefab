@@ -248,3 +248,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e00080d4e7072e4e8aaa88213554962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flameBallPrefab: {fileID: 7533349701157117235, guid: 2ec50226892819c459c23c0c40ef2007, type: 3}

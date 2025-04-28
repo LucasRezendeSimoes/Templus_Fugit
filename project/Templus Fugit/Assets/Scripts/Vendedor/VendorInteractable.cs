@@ -1,36 +1,43 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class VendorInteractable : MonoBehaviour, IInteractable
 {
-    [Header("Configuração do Vendedor")]
-    public int minPrice = 10;
-    public int maxPrice = 50;
-    public ItemType[] possibleItems;  // itens que podem aparecer à venda
+    [Header("Preço mínimo/máximo")]
+    public int       minPrice      = 10;
+    public int       maxPrice      = 50;
+    public ItemType[] possibleItems;
 
     public void Interact()
     {
-        // 1) trava o movimento do player
-        var pc = GameManager.thePlayer.GetComponent<PlayerController>();
-        if (pc != null) 
-            pc.SetCanMove(false);
+        var pc = GameManager.thePlayer?.GetComponent<PlayerController>();
+        if (pc != null) pc.SetCanMove(false);
 
-        // 2) sorteia 2 itens distintos
+        // Sorteia dois itens distintos
         var items = new List<ItemType>();
-        while (items.Count < 2)
+        if (possibleItems.Length > 0)
         {
-            var candidate = possibleItems[Random.Range(0, possibleItems.Length)];
-            if (!items.Contains(candidate))
-                items.Add(candidate);
+            while (items.Count < 2)
+            {
+                var pick = possibleItems[Random.Range(0, possibleItems.Length)];
+                if (!items.Contains(pick))
+                    items.Add(pick);
+            }
         }
 
-        // 3) sorteia um preço para cada
+        // Sorteia preços
         var prices = new List<int>();
         foreach (var it in items)
             prices.Add(Random.Range(minPrice, maxPrice + 1));
 
-        // 4) abre a loja via singleton
-        ShopManager.Instance.OpenShop(items, prices);
+        // Abre a loja
+        if (ShopManager.Instance != null)
+            ShopManager.Instance.OpenShop(items, prices);
+        else
+        {
+            Debug.LogError("ShopManager.Instance é nulo! Verifique se existe um ShopManager ativo na cena.");
+            // reativa o player imediatamente
+            pc?.SetCanMove(true);
+        }
     }
 }
