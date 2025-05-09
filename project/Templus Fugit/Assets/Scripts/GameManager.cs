@@ -12,8 +12,12 @@ public enum ItemType
     CloakNyx      = 2,
     Hourglass     = 3,
     BrokenWatch   = 4,
+    BamiEmber     = 5, 
     // Key        = 5,
 }
+
+// no enum dos ItemType (se for pra guardar em inventário) ou apenas como power-up:
+// public enum PowerUpType { None, FlameBall }
 
 public class GameManager : MonoBehaviour
 {
@@ -49,16 +53,19 @@ public class GameManager : MonoBehaviour
     public float hourglassBonusTime = 30f;    // tempo extra do Hourglass
 
     [Header("Relogio Quebrado")]
-    [Tooltip("Quanto tempo (em segundos) o jogo fica congelado")]
     public float brokenWatchDuration = 10f;
 
     [Header("Véu de Nyx")]
-    [Tooltip("Duração, em segundos, do efeito de invisibilidade")]
     public float cloakDuration = 5f;
-
     // para que inimigos possam checar se o player está invisível
     public bool IsInvisible { get; private set; }
 
+    [Header("Bola de Fogo")]
+    private bool _hasFlamePower = false;
+    private GameObject _flameBallPrefab;
+    public bool CanUseFlame => _hasFlamePower;
+    public GameObject FlameBallPrefab => _flameBallPrefab;
+    
     [Header("Moedas")]
     public int coinCount = 0;
 
@@ -555,6 +562,14 @@ public class GameManager : MonoBehaviour
         IsInvisible = false;
     }
 
+    // chamado pelo BamiEmberCollectible:
+    public void GrantFlamePower(GameObject flameBallPrefab)
+    {
+        _hasFlamePower = true;
+        _flameBallPrefab = flameBallPrefab;
+        Debug.Log("Brasa de Bami coletada! Você agora pode lançar Flame Balls.");
+    }
+
     // Usa (consome) o item naquele slot e aplica o efeito.
     public void UseInventoryItem(int slotIndex)
     {
@@ -581,6 +596,9 @@ public class GameManager : MonoBehaviour
                 // inicia a invisibilidade sem bloquear o jogador
                 StartCoroutine(CloakNyxRoutine());
                 break;
+            case ItemType.BamiEmber:
+                GrantFlamePower(_flameBallPrefab);
+                return; // não remove do inventário
         }
 
         // remove do inventário

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8323078978558351321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1505596797885079061}
+  - component: {fileID: 8590672840437002575}
+  m_Layer: 0
+  m_Name: Display
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1505596797885079061
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8323078978558351321}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8590672840437002575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8323078978558351321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f5b8e992ebd10458a5483b8d9224e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hudPrefab: {fileID: 9026306677260777904, guid: 1f44b881201bdcc4fbbb220c7d3319b8, type: 3}
+  layout: {fileID: 11400000, guid: f14494d8ac372224787d94ea0e479745, type: 2}
+  maxLifes: 3
+  gameTime: 300
+  inventorySize: 5
+  emptySlotSprite: {fileID: 8144212348953700139, guid: ca4632c7544d76946a69c0a3e8773d27, type: 3}
+  itemIcons:
+  - {fileID: 8144212348953700139, guid: ca4632c7544d76946a69c0a3e8773d27, type: 3}
+  - {fileID: 5483308116640144060, guid: 0c36483a74711f2499a93f22213cc95d, type: 3}
+  - {fileID: 1650390262612929984, guid: b8d0389200bf3a3429bb9ffd0a18f630, type: 3}
+  - {fileID: -8646502401594569541, guid: f40e167246b45374bace702d8d286c19, type: 3}
+  - {fileID: 5220552113945895062, guid: b30718cab3c6a8549a1b5f83aca9334e, type: 3}
+  - {fileID: 2281954404962886784, guid: 6a7d7a21a106c6d4c937fa760e58307d, type: 3}
+  hourglassBonusTime: 30
+  brokenWatchDuration: 10
+  cloakDuration: 5
+  coinCount: 0
+  heartsUI:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

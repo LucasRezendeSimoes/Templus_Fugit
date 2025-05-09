@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public KeyCode moveLeftKey = KeyCode.A;
     public KeyCode moveRightKey = KeyCode.D;
     public KeyCode interactKey = KeyCode.E;
+    public KeyCode fireKey = KeyCode.Space;
 
     [Header("Movimentação e Interação")]
     public float moveSpeed = 5f;
@@ -22,10 +23,19 @@ public class PlayerController : MonoBehaviour
     public float boundYBaixo = -2.997569f;
     public float boundYCima = 35.39562f;
 
+    [Header("Flame Ball")]
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private GameObject flameBallPrefab;
+
+    [Header("Cooldown de Tiro")]
+    [Tooltip("Tempo mínimo, em segundos, entre dois disparos de Flame Ball")]
+    public float fireCooldown = 0.5f;
+    private float _lastFireTime = 0f;
+
     private Rigidbody2D rb2d;
     private Animator animator;
-    private Vector2 movement;
     private bool canMove = true;
+    private Vector2 _lastFacing = Vector2.right;
 
     [Header("Animações")]
     public RuntimeAnimatorController andarCima;
@@ -38,8 +48,8 @@ public class PlayerController : MonoBehaviour
     public RuntimeAnimatorController paradoDireita;
 
     [Header("Parâmetros de Combate")]
-    private bool canBeHit = true; // Para evitar que de dano enquanto está em cooldown
-    public float hitCooldown = 2f; // Tempo de cooldown para receber dano
+    private bool canBeHit = true;           // cooldown para receber dano
+    public float hitCooldown = 2f;          // segundos de invencibilidade
 
     [Header("Moedas")]
     public int coinCount = 0;
@@ -56,6 +66,7 @@ public class PlayerController : MonoBehaviour
         if (!canMove) return;
 
         HandleMovement();
+        HandleFire();
         HandleInteraction();
 
         // usar slot 0…4 via teclas 1–5
@@ -103,6 +114,9 @@ public class PlayerController : MonoBehaviour
                 animator.runtimeAnimatorController = paradoDireita;
         }
 
+        if (dir != Vector2.zero)
+            _lastFacing = dir.normalized;
+
         float dt = Time.unscaledDeltaTime;
         Vector2 movement = dir.normalized * moveSpeed * dt;
 
@@ -112,6 +126,29 @@ public class PlayerController : MonoBehaviour
         newPos.y = Mathf.Clamp(newPos.y, boundYBaixo, boundYCima);
 
         transform.position = newPos;
+    }
+
+    private void HandleFire()
+    {
+        // não atira se não tiver o poder, nem prefab, nem ponto de disparo…
+        if (!GameManager.Instance.CanUseFlame || flameBallPrefab == null || firePoint == null)
+            return;
+
+        // respeita o cooldown
+        if (Time.time - _lastFireTime < fireCooldown)
+            return;
+
+        if (Input.GetKeyDown(fireKey))
+        {
+            // marca o instante do tiro
+            _lastFireTime = Time.time;
+
+            // instancia a Flame Ball sem rotação — a própria Launch vai girá-la
+            var fb = Instantiate(flameBallPrefab, firePoint.position, Quaternion.identity)
+                     .GetComponent<FlameBall>();
+
+            fb.Launch(_lastFacing);
+        }
     }
 
     void HandleInteraction()
