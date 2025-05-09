@@ -16,9 +16,6 @@ public enum ItemType
     // Key        = 5,
 }
 
-// no enum dos ItemType (se for pra guardar em inventário) ou apenas como power-up:
-// public enum PowerUpType { None, FlameBall }
-
 public class GameManager : MonoBehaviour
 {
     [Tooltip("Arraste aqui o prefab do HUD")]
@@ -65,6 +62,8 @@ public class GameManager : MonoBehaviour
     private GameObject _flameBallPrefab;
     public bool CanUseFlame => _hasFlamePower;
     public GameObject FlameBallPrefab => _flameBallPrefab;
+    [SerializeField] private Sprite flameBallIcon;       // atribuir no Inspector
+    private Image _powerIconUI;
     
     [Header("Moedas")]
     public int coinCount = 0;
@@ -210,6 +209,11 @@ public class GameManager : MonoBehaviour
                         slotImg.sprite = emptySlotSprite;
                     }
                 }
+                var powerIconTf = hud.transform.Find("HUD/PowerPanel/PowerIcon");
+                if (powerIconTf != null)
+                    _powerIconUI = powerIconTf.GetComponent<Image>();
+                else
+                    Debug.LogError("GameManager: não achei HUD/PowerPanel/PowerIcon no prefab!");
             }
         }
         else
@@ -568,6 +572,11 @@ public class GameManager : MonoBehaviour
         _hasFlamePower = true;
         _flameBallPrefab = flameBallPrefab;
         Debug.Log("Brasa de Bami coletada! Você agora pode lançar Flame Balls.");
+
+        if (_powerIconUI != null)
+        {
+            _powerIconUI.sprite = flameBallIcon;
+        }
     }
 
     // Usa (consome) o item naquele slot e aplica o efeito.
