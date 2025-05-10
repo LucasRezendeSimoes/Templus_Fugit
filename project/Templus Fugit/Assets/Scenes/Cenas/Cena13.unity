@@ -8108,6 +8108,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
+--- !u!4 &624518606 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1984979846246933369, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
+  m_PrefabInstance: {fileID: 624518605}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &694600167
 GameObject:
   m_ObjectHideFlags: 0
@@ -9079,7 +9084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6728f7fcafa677449660a79e502d25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {fileID: 624518606}
   smoothSpeed: 1
   minCameraBounds: {x: 0, y: -0.53, z: 0}
   maxCameraBounds: {x: 0, y: -0.53, z: 0}

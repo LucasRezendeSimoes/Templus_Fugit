@@ -8168,6 +8168,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
+--- !u!4 &893019594 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1984979846246933369, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
+  m_PrefabInstance: {fileID: 893019593}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1091906063
 GameObject:
   m_ObjectHideFlags: 0
@@ -8320,7 +8325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6728f7fcafa677449660a79e502d25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {fileID: 893019594}
   smoothSpeed: 1
   minCameraBounds: {x: 0, y: -0.53, z: 0}
   maxCameraBounds: {x: 0, y: -0.53, z: 0}
@@ -8681,6 +8686,28 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1750279560 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
+  m_PrefabInstance: {fileID: 44183026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f5b8e992ebd10458a5483b8d9224e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2073707056 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3813222758382759279, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
+  m_PrefabInstance: {fileID: 893019593}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c76cde4c4e61744b279fc4eca27028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5527048689849030046
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8704,7 +8731,7 @@ PrefabInstance:
     - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: gameManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1750279560}
     - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: difficultyLevel
       value: 1
@@ -8712,7 +8739,7 @@ PrefabInstance:
     - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: playerController
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2073707056}
     - target: {fileID: 7194593850667391532, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.75

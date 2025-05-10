@@ -214,7 +214,7 @@ MonoBehaviour:
   moveRightKey: 100
   interactKey: 101
   fireKey: 32
-  moveSpeed: 3
+  moveSpeed: 5
   interactionRange: 2
   interactableLayer:
     serializedVersion: 2

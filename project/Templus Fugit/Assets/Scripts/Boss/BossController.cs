@@ -41,6 +41,10 @@ public class BossController : MonoBehaviour
 
     void Update()
     {
+        // se o relógio está parado, nem procesa nada
+        if (GameManager.Instance.IsTimeStopped)
+            return;
+            
         // Se o jogador estiver invisível, o boss fica em idle e não persegue nem ataca
         if (GameManager.Instance != null && GameManager.Instance.IsInvisible)
         {

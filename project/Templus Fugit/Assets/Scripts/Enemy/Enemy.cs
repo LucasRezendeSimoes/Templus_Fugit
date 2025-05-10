@@ -43,6 +43,9 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // se o relógio está parado, nem procesa nada
+        if (GameManager.Instance.IsTimeStopped)
+            return;
         if (!_initialized || target == null)
             return;
 

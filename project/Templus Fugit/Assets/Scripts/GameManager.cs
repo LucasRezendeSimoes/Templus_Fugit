@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Relogio Quebrado")]
     public float brokenWatchDuration = 10f;
+    public bool IsTimeStopped { get; private set; }
 
     [Header("Véu de Nyx")]
     public float cloakDuration = 5f;
@@ -314,16 +315,11 @@ public class GameManager : MonoBehaviour
         UpdateTimeUI();
 
         // Verifica se a cena atual é "Cena2" ou posterior antes de atualizar o tempo
-        if (SceneManager.GetActiveScene().name == "Cena2" || IsSceneAfter("Cena2"))
+        if (!IsTimeStopped && (SceneManager.GetActiveScene().name == "Cena2" || IsSceneAfter("Cena2")))
         {
-            // Atualiza o tempo restante
             currentTime -= Time.deltaTime;
-
-            // Reinicia o jogo se o tempo chegar a 0
             if (currentTime <= 0)
-            {
                 RestartGame();
-            }
         }
 
         CheckSceneTransitions(SceneManager.GetActiveScene().name, thePlayer.transform.position);
@@ -337,8 +333,8 @@ public class GameManager : MonoBehaviour
             { "Cena2", new[] { (new Vector2(-0.9350259f, 15.52005f), new Vector2(0.935003f, 15.52005f), "Cena5"),
                                (new Vector2(-6.335011f, 8.068845f), new Vector2(-6.335011f, 8.935001f), "Cena3"),
                                (new Vector2(6.308114f, 8.064985f), new Vector2(6.308114f, 8.935001f), "Cena4") } },
-            { "Cena3", new[] { (new Vector2(6.652393f, -1.935015f), new Vector2(6.652393f, -1.208376f), "Cena2") } },
-            { "Cena4", new[] { (new Vector2(-6.752596f, -1.477549f), new Vector2(-6.752596f, -0.5053926f), "Cena2") } },
+            { "Cena3", new[] { (new Vector2(6.472393f, -1.251016f), new Vector2(6.472393f, -0.2910173f), "Cena2") } },
+            { "Cena4", new[] { (new Vector2(-6.632596f, -1.532009f), new Vector2(-6.632596f, -0.4679966f), "Cena2") } },
             { "Cena5", new[] { (new Vector2(-0.7820935f, -3.702741f), new Vector2(0.8307027f, -3.702741f), "Cena2"),
                                (new Vector2(-0.7181748f, 2.066446f), new Vector2(0.7148368f, 2.066446f), "Cena6"),
                                (new Vector2(6.514736f, -1.51467f), new Vector2(6.514736f, 0.5432134f), "Cena9"),
@@ -542,9 +538,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator StopTimeCoroutine()
     {
-        Time.timeScale = 0f;
+        IsTimeStopped = true;
+        // roda aguardando o tempo real, sem mexer no timeScale
         yield return new WaitForSecondsRealtime(brokenWatchDuration);
-        Time.timeScale = 1f;
+        IsTimeStopped = false;
     }
 
     private IEnumerator CloakNyxRoutine()
@@ -587,25 +584,25 @@ public class GameManager : MonoBehaviour
         ItemType item = inventory[slotIndex];
         switch (item)
         {
-            case ItemType.HealthPotion:
+            case ItemType.HealthPotion: // pocao de vida
                 AddLife(2);   // recupera 2 corações
                 break;
             // case ItemType.Key: … etc
-            case ItemType.Hourglass:
+            case ItemType.Hourglass: // ampulheta
             // adiciona tempo 
                 currentTime += hourglassBonusTime;
             // limitar a um máximo:
                 currentTime = Mathf.Min(currentTime, gameTime);
                 Debug.Log($"Ampulheta usada! +{hourglassBonusTime}s");
                 break;
-            case ItemType.BrokenWatch:
+            case ItemType.BrokenWatch: // relógio quebrado
                 StartCoroutine(StopTimeCoroutine());
                 break;
-            case ItemType.CloakNyx:
+            case ItemType.CloakNyx: // véu de Nyx
                 // inicia a invisibilidade sem bloquear o jogador
                 StartCoroutine(CloakNyxRoutine());
                 break;
-            case ItemType.BamiEmber:
+            case ItemType.BamiEmber: // brasa de Bami
                 GrantFlamePower(_flameBallPrefab);
                 return; // não remove do inventário
         }
