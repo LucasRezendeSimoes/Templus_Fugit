@@ -9782,6 +9782,7 @@ MonoBehaviour:
   - buyButton: {fileID: 1475471331}
     icon: {fileID: 2068667233}
     priceText: {fileID: 1188429785}
+  flameBallPrefab: {fileID: 7533349701157117235, guid: 2ec50226892819c459c23c0c40ef2007, type: 3}
 --- !u!4 &643287358
 Transform:
   m_ObjectHideFlags: 0

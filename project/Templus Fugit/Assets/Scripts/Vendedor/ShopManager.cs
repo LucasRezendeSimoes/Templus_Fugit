@@ -16,10 +16,15 @@ public class ShopManager : MonoBehaviour
         public TextMeshProUGUI  priceText;
     }
 
-    [Header("Atribua aqui no Inspector")]
-    public GameObject shopPanelRoot;  // arraste o GameObject ShopPanel
-    public Button     closeButton;
-    public SlotUI[]   slots;          // tamanho = 2
+    [Header("Referências da UI")]
+    [Tooltip("Arraste aqui o painel root da loja (ShopPanel)")]
+    public GameObject      shopPanelRoot;
+    public Button          closeButton;
+    public SlotUI[]        slots;        // tamanho = 2
+
+    [Header("Flame Ball Prefab")]
+    [Tooltip("Arraste aqui o prefab da FlameBall usado no GameManager")]
+    public GameObject      flameBallPrefab;
 
     private List<ItemType> shopItems;
     private int[]          prices;
@@ -35,51 +40,79 @@ public class ShopManager : MonoBehaviour
             return;
         }
 
-        // Escondemos o painel até o momento de abrir a loja
         if (shopPanelRoot == null)
             Debug.LogError("ShopPanelRoot não foi atribuído no ShopManager!");
         else
             shopPanelRoot.SetActive(false);
 
-        closeButton.onClick.AddListener(CloseShop);
+        if (closeButton != null)
+            closeButton.onClick.AddListener(CloseShop);
     }
 
+    /// <summary>
+    /// Abre a loja com os itens e preços sorteados.
+    /// </summary>
     public void OpenShop(List<ItemType> items, List<int> itemPrices)
     {
         shopItems = items;
         prices    = itemPrices.ToArray();
 
-        // Mostra o painel
         shopPanelRoot.SetActive(true);
 
-        // Preenche os slots
         for (int i = 0; i < slots.Length; i++)
         {
             var it = shopItems[i];
             slots[i].icon.sprite    = GameManager.Instance.GetItemIcon(it);
             slots[i].priceText.text = prices[i].ToString();
 
-            int idx = i; // evita captura de variável
+            int idx = i;
             slots[i].buyButton.onClick.RemoveAllListeners();
             slots[i].buyButton.onClick.AddListener(() => TryBuy(idx));
         }
     }
 
+    /// <summary>
+    /// Tenta comprar o item no slot indicado.
+    /// Para BamiEmber, já aplica o poder imediatamente.
+    /// </summary>
     private void TryBuy(int index)
     {
+        var item = shopItems[index];
         int cost = prices[index];
-        if (GameManager.Instance.coinCount >= cost)
+
+        if (GameManager.Instance.coinCount < cost)
         {
-            GameManager.Instance.AddCoins(-cost);
-            GameManager.Instance.AddInventoryItem(shopItems[index]);
-            CloseShop();
+            Debug.Log("Você não tem moedas suficientes!");
+            return;
+        }
+
+        // Desconta moedas
+        GameManager.Instance.AddCoins(-cost);
+
+        if (item == ItemType.BamiEmber)
+        {
+
+            // Concede o poder da flame ball imediatamente
+            if (flameBallPrefab != null)
+            {
+                GameManager.Instance.AddInventoryItem(item);
+                GameManager.Instance.GrantFlamePower(flameBallPrefab);
+            }
+            else
+                Debug.LogWarning("FlameBallPrefab não atribuído no ShopManager.");
         }
         else
         {
-            Debug.Log("Você não tem moedas suficientes!");
+            // Adiciona ao inventário normalmente
+            GameManager.Instance.AddInventoryItem(item);
         }
+
+        CloseShop();
     }
 
+    /// <summary>
+    /// Fecha a janela da loja e reativa movimentação.
+    /// </summary>
     private void CloseShop()
     {
         shopPanelRoot.SetActive(false);
