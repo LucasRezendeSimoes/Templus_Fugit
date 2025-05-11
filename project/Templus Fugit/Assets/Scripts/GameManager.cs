@@ -576,6 +576,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Sprite GetItemIcon(ItemType itemType)
+    {
+        int idx = (int)itemType;
+        if (idx >= 0 && idx < itemIcons.Length && itemIcons[idx] != null)
+            return itemIcons[idx];
+        return emptySlotSprite;
+    }
+
     // Usa (consome) o item naquele slot e aplica o efeito.
     public void UseInventoryItem(int slotIndex)
     {

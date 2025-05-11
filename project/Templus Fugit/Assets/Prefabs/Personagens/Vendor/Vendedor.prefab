@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8994197594454911948}
   - component: {fileID: 2108224936686385881}
   - component: {fileID: 3211247132187900696}
+  - component: {fileID: 2381462913580795633}
   m_Layer: 0
   m_Name: Vendedor
   m_TagString: Untagged
@@ -171,12 +172,28 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3583683027239627398}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddb1158b75b84f64f820c005ec8ca655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueBox: {fileID: 0}
+--- !u!114 &2381462913580795633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3583683027239627398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6bc0f733ce5dc4eb1152883b38881b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopManagerPrefab: {fileID: 525599357725547882, guid: 92cc02bf3ebbbcf459ed3e5f06b29647, type: 3}
+  minPrice: 10
+  maxPrice: 50
+  possibleItems: 0100000002000000030000000400000005000000
 --- !u!1 &4701529660589962854
 GameObject:
   m_ObjectHideFlags: 0
