@@ -19,31 +19,65 @@ public class BossController : MonoBehaviour
     public RuntimeAnimatorController Death;
 
     [Header("Parâmetros de Combate")]
-    public int   health          = 20;
+    public int   maxHealth       = 20;
     public float detectionRange = 8f;
     public float attackRange    = 1.2f;
     public float attackCooldown = 1.5f;
     public float hitCooldown    = 0.5f;
-    private bool  canAttack     = true;
-    private bool  canBeHit      = true;
-    private float lastAttackTime;
+
+    private int   _currentHealth;
+    private bool  _canAttack      = true;
+    private bool  _canBeHit       = true;
+    private float _lastAttackTime;
+
+    [Header("Health Bar")]
+    [Tooltip("Prefab do HealthBar (com componente HealthBar)")]
+    public HealthBar healthBarPrefab;  
+    [Tooltip("Altura da barra acima da cabeça")]
+    public float     healthBarHeight = 1.2f;
+    private HealthBar _healthBarInstance;
 
     void Start()
     {
+        // Setup combate
+        _currentHealth = maxHealth;
+
         agent    = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis   = false;
 
         animator = GetComponent<Animator>();
         rb2d     = GetComponent<Rigidbody2D>();
+
+        // Instancia a barra de vida no Canvas
+        if (healthBarPrefab != null)
+        {
+            // procura um GameObject vazio chamado "HealthBars" sob o Canvas
+            var container = GameObject.Find("HealthBars")?.transform;
+            if (container == null)
+                Debug.LogError("Não achei o container 'HealthBars' no Canvas!");
+
+            else
+            {
+                _healthBarInstance = Instantiate(
+                    healthBarPrefab,
+                    container
+                );
+                _healthBarInstance.Initialize(transform, Vector3.up * healthBarHeight);
+                _healthBarInstance.SetHealthPercent(1f);
+            }
+        }
+
+        // Começa desativando a hitbox de ataque
+        ToggleHitBox(false);
     }
 
     void Update()
     {
-        // se o tempo está parado, nada acontece
+        // pausa se o tempo estiver stopped
         if (GameManager.Instance.IsTimeStopped) return;
 
-        // se o player está invisível, fica em Idle
+        // se o player estiver invisível, fica só em Idle
         if (GameManager.Instance.IsInvisible)
         {
             animator.runtimeAnimatorController = Idle;
@@ -56,14 +90,12 @@ public class BossController : MonoBehaviour
 
         if (dist > detectionRange)
         {
-            // fora de alcance de detecção → Idle
             animator.runtimeAnimatorController = Idle;
             agent.isStopped = true;
             ToggleHitBox(false);
         }
         else if (dist > attackRange)
         {
-            // persegue
             animator.runtimeAnimatorController = Run;
             agent.isStopped = false;
             agent.SetDestination(target.position);
@@ -72,56 +104,64 @@ public class BossController : MonoBehaviour
         }
         else
         {
-            // está em alcance de ataque
             agent.isStopped = true;
             FlipDirection();
 
-            if (Time.time - lastAttackTime >= attackCooldown && canAttack)
+            if (Time.time - _lastAttackTime >= attackCooldown && _canAttack)
             {
                 StartCoroutine(HandleAttack());
-                lastAttackTime = Time.time;
+                _lastAttackTime = Time.time;
             }
         }
     }
 
     private IEnumerator HandleAttack()
     {
-        canAttack = false;
+        _canAttack = false;
         animator.runtimeAnimatorController = Attack;
 
-        // ativa hitbox na metade da animação
-        float attackAnimLength = animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(attackAnimLength * 0.5f);
+        // meio da animação → ativa hitbox
+        float half = animator.GetCurrentAnimatorStateInfo(0).length * 0.5f;
+        yield return new WaitForSeconds(half);
 
-        var hb = transform.Find("EnemyHitBox");
+        var hb = transform.Find("BossHitBox");
         if (hb != null) hb.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(0.1f);
-
         if (hb != null) hb.gameObject.SetActive(false);
 
-        // volta a Idle e espera cooldown
         animator.runtimeAnimatorController = Idle;
         yield return new WaitForSeconds(attackCooldown);
-        canAttack = true;
+        _canAttack = true;
     }
 
+    /// <summary>
+    /// Chame este método (por exemplo, da FlameBall) para aplicar dano.
+    /// </summary>
     public void TakeDamage(int dmg)
     {
-        if (!canBeHit) return;
+        if (!_canBeHit) return;
 
-        health -= dmg;
-        canBeHit = false;
+        _currentHealth -= dmg;
+        _canBeHit = false;
+
+        // atualiza barra de vida
+        if (_healthBarInstance != null)
+            _healthBarInstance.SetHealthPercent(_currentHealth / (float)maxHealth);
+
+        // feedback visual
         StartCoroutine(FlashRed());
 
-        if (health <= 0) Die();
-        else             StartCoroutine(HitCooldown());
+        if (_currentHealth <= 0)
+            Die();
+        else
+            StartCoroutine(HitCooldown());
     }
 
     private IEnumerator HitCooldown()
     {
         yield return new WaitForSeconds(hitCooldown);
-        canBeHit = true;
+        _canBeHit = true;
     }
 
     private IEnumerator FlashRed()
@@ -137,6 +177,10 @@ public class BossController : MonoBehaviour
 
     private void Die()
     {
+        // destrói barra
+        if (_healthBarInstance != null)
+            Destroy(_healthBarInstance.gameObject);
+
         animator.runtimeAnimatorController = Death;
         agent.isStopped = true;
         Destroy(gameObject, 1f);
@@ -163,7 +207,7 @@ public class BossController : MonoBehaviour
 
     private void ToggleHitBox(bool state)
     {
-        var hb = transform.Find("EnemyHitBox");
+        var hb = transform.Find("BossHitBox");
         if (hb != null) hb.gameObject.SetActive(state);
     }
 }

@@ -6,13 +6,13 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [Header("References")]
-    public Transform target;                // arraste ali o Player
-    public float detectionRange = 8f;
-    public float attackRange    = 1.2f;
-    public float attackCooldown = 1f;
-    public int   maxHealth      = 30;
-    public float hitCooldown    = 0.5f;
-    public float flashTime      = 0.1f;
+    public Transform target;
+    public float     detectionRange = 8f;
+    public float     attackRange    = 1.2f;
+    public float     attackCooldown = 1f;
+    public int       maxHealth      = 30;
+    public float     hitCooldown    = 0.5f;
+    public float     flashTime      = 0.1f;
 
     [Header("Animators")]
     public RuntimeAnimatorController idleAnim;
@@ -24,80 +24,75 @@ public class Enemy : MonoBehaviour
     [Header("Health Bar")]
     [SerializeField] private HealthBar _healthBarPrefab;      // assign no Inspector
     [SerializeField] private float     _healthBarHeight = 1.2f;
-    private HealthBar  _healthBarInstance;
+    private HealthBar _healthBarInstance;
 
     private NavMeshAgent agent;
-    private Animator      animator;
-    private Rigidbody2D   rb;
-    private int           currentHealth;
-    private bool          canAttack = true;
-    private bool          canBeHit   = true;
-    private float         lastAttack;
+    private Animator     animator;
+    private Rigidbody2D  rb;
+
+    private int   currentHealth;
+    private bool  canAttack = true;
+    private bool  canBeHit  = true;
+    private float lastAttack;
 
     void Start()
     {
-        // (se já tinhas currentHealth = maxHealth, deixa aqui)
         currentHealth = maxHealth;
 
-        // instancia a barra de vida
+        // instancia a barra
         if (_healthBarPrefab != null)
         {
-            // procurar o container no Canvas
-            var container = GameObject.Find("HealthBar")?.transform;
+            var container = GameObject.Find("HealthBars")?.transform; // ou "HealthBar", conforme vc nomear
             if (container != null)
             {
-                _healthBarInstance = Instantiate(
-                    _healthBarPrefab,
-                    container
-                );
+                _healthBarInstance = Instantiate(_healthBarPrefab, container);
                 _healthBarInstance.Initialize(transform, Vector3.up * _healthBarHeight);
                 _healthBarInstance.SetHealthPercent(1f);
             }
         }
-        agent     = GetComponent<NavMeshAgent>();
+
+        agent    = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        rb       = GetComponent<Rigidbody2D>();
+
         agent.updateRotation = false;
         agent.updateUpAxis   = false;
-        animator  = GetComponent<Animator>();
-        rb        = GetComponent<Rigidbody2D>();
-        currentHealth = maxHealth;
     }
 
     void Update()
     {
-        // não processa enquanto tempo parado ou invisível
         if (GameManager.Instance.IsTimeStopped || GameManager.Instance.IsInvisible)
         {
-        agent.isStopped = true;
-        animator.runtimeAnimatorController = idleAnim;
-        return;
+            agent.isStopped                  = true;
+            animator.runtimeAnimatorController = idleAnim;
+            return;
         }
 
         float dist = Vector2.Distance(transform.position, target.position);
 
         if (dist > detectionRange)
         {
-        // distante → idle
-        agent.isStopped = true;
-        animator.runtimeAnimatorController = idleAnim;
-        ToggleHitBox(false);
+            // idle
+            agent.isStopped                  = true;
+            animator.runtimeAnimatorController = idleAnim;
+            ToggleHitBox(false);
         }
         else if (dist > attackRange)
         {
-        // persegue
-        agent.isStopped = false;
-        agent.SetDestination(target.position);
-        animator.runtimeAnimatorController = runAnim;
-        FlipTowards(target.position);
-        ToggleHitBox(false);
+            // persegue
+            agent.isStopped                  = false;
+            agent.SetDestination(target.position);
+            animator.runtimeAnimatorController = runAnim;
+            FlipTowards(target.position);
+            ToggleHitBox(false);
         }
         else
         {
-        // ataque
-        agent.isStopped = true;
-        FlipTowards(target.position);
-
-        if (Time.time - lastAttack >= attackCooldown && canAttack)
-            StartCoroutine(DoAttack());
+            // ataca
+            agent.isStopped = true;
+            FlipTowards(target.position);
+            if (Time.time - lastAttack >= attackCooldown && canAttack)
+                StartCoroutine(DoAttack());
         }
     }
 
@@ -107,14 +102,15 @@ public class Enemy : MonoBehaviour
         lastAttack = Time.time;
 
         animator.runtimeAnimatorController = attackAnim;
-        // espera animação (você pode usar length ou _AnimationEvents_)
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
-        // ativa hitbox
-        var hb = transform.Find("EnemyHitBox").gameObject;
-        hb.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        hb.SetActive(false);
+        var hb = transform.Find("EnemyHitBox")?.gameObject;
+        if (hb != null)
+        {
+            hb.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+            hb.SetActive(false);
+        }
 
         animator.runtimeAnimatorController = idleAnim;
         yield return new WaitForSeconds(attackCooldown);
@@ -125,21 +121,21 @@ public class Enemy : MonoBehaviour
     {
         if (!canBeHit) return;
 
-        currentHealth -= dmg;
-        // atualiza UI:
-        if (_healthBarInstance != null)
-            _healthBarInstance.SetHealthPercent(currentHealth / (float)maxHealth);
+        // 1) Subtrai vida e atualiza UI
+        currentHealth = Mathf.Clamp(currentHealth - dmg, 0, maxHealth);
+        _healthBarInstance?.SetHealthPercent(currentHealth / (float)maxHealth);
 
+        // 2) Se morreu, mata e sai
+        if (currentHealth <= 0)
+        {
+            Die();
+            return;
+        }
+
+        // 3) flash + cooldown de hit
         canBeHit = false;
         StartCoroutine(FlashRed());
-
-        if (!canBeHit) return;
-        currentHealth -= dmg;
-        canBeHit = false;
-        StartCoroutine(FlashRed());
-
-        if (currentHealth <= 0) Die();
-        else                       StartCoroutine(ResetHitCooldown());
+        StartCoroutine(ResetHitCooldown());
     }
 
     private IEnumerator ResetHitCooldown()
@@ -151,17 +147,18 @@ public class Enemy : MonoBehaviour
     private IEnumerator FlashRed()
     {
         var sr = GetComponentInChildren<SpriteRenderer>();
-        sr.color = Color.red;
-        yield return new WaitForSeconds(flashTime);
-        sr.color = Color.white;
+        if (sr != null)
+        {
+            sr.color = Color.red;
+            yield return new WaitForSeconds(flashTime);
+            sr.color = Color.white;
+        }
     }
 
     private void Die()
     {
-        // opcional: destruir barra de vida junto
         if (_healthBarInstance != null)
             Destroy(_healthBarInstance.gameObject);
-
         animator.runtimeAnimatorController = deathAnim;
         agent.isStopped = true;
         Destroy(gameObject, 1f);
@@ -170,8 +167,7 @@ public class Enemy : MonoBehaviour
     private void FlipTowards(Vector3 pos)
     {
         var dir = pos - transform.position;
-        if (dir.x > 0) transform.eulerAngles = Vector3.zero;
-        else           transform.eulerAngles = new Vector3(0,180,0);
+        transform.eulerAngles = dir.x > 0 ? Vector3.zero : new Vector3(0,180,0);
     }
 
     private void ToggleHitBox(bool v)
@@ -179,4 +175,4 @@ public class Enemy : MonoBehaviour
         var hb = transform.Find("EnemyHitBox")?.gameObject;
         if (hb!=null) hb.SetActive(v);
     }
-    }
+}

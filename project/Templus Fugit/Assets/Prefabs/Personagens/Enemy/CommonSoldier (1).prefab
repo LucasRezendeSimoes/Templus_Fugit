@@ -265,6 +265,8 @@ MonoBehaviour:
   attackAnim: {fileID: 0}
   hitAnim: {fileID: 0}
   deathAnim: {fileID: 0}
+  _healthBarPrefab: {fileID: 0}
+  _healthBarHeight: 1.2
 --- !u!195 &2233879466976575396
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1336638073752315502}
   - component: {fileID: 5695929011016211445}
   - component: {fileID: 2343223574390581381}
+  - component: {fileID: 5808635522623278999}
   m_Layer: 5
   m_Name: HealthBar_BG
   m_TagString: Untagged
@@ -76,6 +77,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5808635522623278999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583641309523956004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13aa98ea7db07874380d40260049683b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fillImage: {fileID: 7881014123512109275}
 --- !u!1 &2591300787485063406
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +125,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 60, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2444660516270054098
 CanvasRenderer:
@@ -161,7 +175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3210933601133769748}
   m_Layer: 5
-  m_Name: HealthBar
+  m_Name: HealthBars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
