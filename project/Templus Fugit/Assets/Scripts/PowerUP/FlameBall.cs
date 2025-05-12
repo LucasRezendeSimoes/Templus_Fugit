@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlameBall : MonoBehaviour
 {
     public float speed = 10f;
-    public int damage = 1;
+    public int damage = 10;
 
     private Rigidbody2D rb2d;
 
@@ -30,15 +30,28 @@ public class FlameBall : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // if (other.CompareTag("Enemy"))
-        // {
-        //     // Inflige dano (supondo que seu inimigo tenha TakeDamage)
-        //     var enemy = other.GetComponent<Enemy>();
-        //     if (enemy != null)
-        //         enemy.TakeDamage(damage);
+        // Se bater num Boss:
+        if (other.CompareTag("Boss"))
+        {
+            var boss = other.GetComponent<BossController>();
+            if (boss != null)
+                boss.TakeDamage(damage);
 
-        //     Destroy(gameObject);
-        // }
+            Destroy(gameObject);
+            return;
+        }
+
+        // Se bater num inimigo comum:
+        if (other.CompareTag("Enemy"))
+        {
+            var enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+                enemy.TakeDamage(damage);
+
+            Destroy(gameObject);
+            return;
+        }
+        
         if (other.CompareTag("Ground"))
         {
             Destroy(gameObject);

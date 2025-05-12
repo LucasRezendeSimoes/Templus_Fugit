@@ -5,48 +5,46 @@ using UnityEngine.AI;
 
 public class BossController : MonoBehaviour
 {
-    public Transform target;
+    [Header("Referências")]
+    public Transform target;               // o jogador
     private NavMeshAgent agent;
-    private Animator animator;
-    private Rigidbody2D rb2d;
+    private Animator       animator;
+    private Rigidbody2D    rb2d;
 
-    [Header("Animadores")]
-    public RuntimeAnimatorController Attack;
-    public RuntimeAnimatorController Death;
+    [Header("Animações")]
     public RuntimeAnimatorController Idle;
     public RuntimeAnimatorController Run;
-    public RuntimeAnimatorController Take_hit;
+    public RuntimeAnimatorController Attack;
+    public RuntimeAnimatorController TakeHit;
+    public RuntimeAnimatorController Death;
 
     [Header("Parâmetros de Combate")]
-    public int vida = 100;
-    private bool canBeHit = true; // Para evitar que o inimigo tome dano enquanto está em cooldown
-    public float attackRange = 1.5f;
-    public float DamageFlashTime = 0.2f; // Tempo que o inimigo pisca em vermelho ao receber dano
-    public float detectionRange = 10.0f;
-    public float hitCooldown = 0.5f;
-    public float attackCooldown = 1.0f; // Tempo de cooldown entre os ataques
-    private bool canAttack = true; // Para evitar que o inimigo ataque enquanto está em cooldown
+    public int   health          = 20;
+    public float detectionRange = 8f;
+    public float attackRange    = 1.2f;
+    public float attackCooldown = 1.5f;
+    public float hitCooldown    = 0.5f;
+    private bool  canAttack     = true;
+    private bool  canBeHit      = true;
     private float lastAttackTime;
-
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        agent    = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
-        agent.updateUpAxis = false;
+        agent.updateUpAxis   = false;
 
         animator = GetComponent<Animator>();
-        rb2d = GetComponent<Rigidbody2D>();
+        rb2d     = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        // se o relógio está parado, nem procesa nada
-        if (GameManager.Instance.IsTimeStopped)
-            return;
-            
-        // Se o jogador estiver invisível, o boss fica em idle e não persegue nem ataca
-        if (GameManager.Instance != null && GameManager.Instance.IsInvisible)
+        // se o tempo está parado, nada acontece
+        if (GameManager.Instance.IsTimeStopped) return;
+
+        // se o player está invisível, fica em Idle
+        if (GameManager.Instance.IsInvisible)
         {
             animator.runtimeAnimatorController = Idle;
             agent.isStopped = true;
@@ -54,18 +52,18 @@ public class BossController : MonoBehaviour
             return;
         }
 
-        float distanceToTarget = Vector2.Distance(transform.position, target.position);
+        float dist = Vector2.Distance(transform.position, target.position);
 
-        if (distanceToTarget > detectionRange)
+        if (dist > detectionRange)
         {
-            // Idle
+            // fora de alcance de detecção → Idle
             animator.runtimeAnimatorController = Idle;
             agent.isStopped = true;
             ToggleHitBox(false);
         }
-        else if (distanceToTarget > attackRange)
+        else if (dist > attackRange)
         {
-            // Corre em direção ao jogador
+            // persegue
             animator.runtimeAnimatorController = Run;
             agent.isStopped = false;
             agent.SetDestination(target.position);
@@ -74,7 +72,7 @@ public class BossController : MonoBehaviour
         }
         else
         {
-            // Está no alcance de ataque
+            // está em alcance de ataque
             agent.isStopped = true;
             FlipDirection();
 
@@ -86,39 +84,41 @@ public class BossController : MonoBehaviour
         }
     }
 
-    private void FlipDirection()
+    private IEnumerator HandleAttack()
     {
-        Vector3 direction = target.position - transform.position;
-        if (direction.x > 0) // Direita
-            transform.eulerAngles = new Vector3(0, 0, 0);
-        else if (direction.x < 0) // Esquerda
-            transform.eulerAngles = new Vector3(0, 180, 0);
-        else if (direction.y > 0) // Cima
-            transform.eulerAngles = new Vector3(0, 90, 0);
-        else if (direction.y < 0) // Baixo
-            transform.eulerAngles = new Vector3(0, 270, 0);
+        canAttack = false;
+        animator.runtimeAnimatorController = Attack;
+
+        // ativa hitbox na metade da animação
+        float attackAnimLength = animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(attackAnimLength * 0.5f);
+
+        var hb = transform.Find("EnemyHitBox");
+        if (hb != null) hb.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (hb != null) hb.gameObject.SetActive(false);
+
+        // volta a Idle e espera cooldown
+        animator.runtimeAnimatorController = Idle;
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int dmg)
     {
         if (!canBeHit) return;
 
-        vida -= damage;
+        health -= dmg;
         canBeHit = false;
-
         StartCoroutine(FlashRed());
 
-        if (vida <= 0)
-        {
-            Die();
-        }
-        else
-        {
-            StartCoroutine(HitCooldownCoroutine());
-        }
+        if (health <= 0) Die();
+        else             StartCoroutine(HitCooldown());
     }
 
-    private IEnumerator HitCooldownCoroutine()
+    private IEnumerator HitCooldown()
     {
         yield return new WaitForSeconds(hitCooldown);
         canBeHit = true;
@@ -126,64 +126,44 @@ public class BossController : MonoBehaviour
 
     private IEnumerator FlashRed()
     {
-        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        if (spriteRenderer != null)
+        var sr = GetComponentInChildren<SpriteRenderer>();
+        if (sr != null)
         {
-            spriteRenderer.color = Color.red;
-            yield return new WaitForSeconds(DamageFlashTime);
-            spriteRenderer.color = Color.white;
+            sr.color = Color.red;
+            yield return new WaitForSeconds(0.2f);
+            sr.color = Color.white;
         }
-    }
-
-    private IEnumerator HandleAttack()
-    {
-        // Configura o estado de ataque
-        canAttack = false;
-        animator.runtimeAnimatorController = Attack;
-
-        // Referência à hitbox de ataque
-        Transform hitBoxTransform = transform.Find("BossHitBox");
-        if (hitBoxTransform == null)
-        {
-            // Debug.LogError("BossHit não foi encontrado como filho do BossController.");
-            yield break; // Sai da função se a hitbox não for encontrada
-        }
-
-        GameObject hitBox = hitBoxTransform.gameObject;
-
-        // Aguarda o tempo necessário para a animação de ataque terminar
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-
-        // Ativa a hitbox para causar dano
-        hitBox.SetActive(true);
-
-        // Aguarda um curto período para garantir que o dano seja aplicado
-        yield return new WaitForSeconds(0.1f);
-
-        // Desativa a hitbox após o ataque
-        hitBox.SetActive(false);
-
-        animator.runtimeAnimatorController = Idle; // Retorna ao estado Idle após o ataque
-
-        // Aguarda o cooldown do ataque antes de permitir outro ataque
-        yield return new WaitForSeconds(attackCooldown);
-
-        canAttack = true;
     }
 
     private void Die()
     {
         animator.runtimeAnimatorController = Death;
         agent.isStopped = true;
-        Destroy(gameObject, 1.0f); // Destroi o inimigo após a animação de morte
+        Destroy(gameObject, 1f);
+    }
+
+    private void FlipDirection()
+    {
+        Vector3 dir = (target.position - transform.position).normalized;
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        {
+            // horizontal
+            transform.eulerAngles = dir.x > 0
+                ? new Vector3(0, 0, 0)
+                : new Vector3(0, 180, 0);
+        }
+        else
+        {
+            // vertical
+            transform.eulerAngles = dir.y > 0
+                ? new Vector3(0, 90, 0)
+                : new Vector3(0, 270, 0);
+        }
     }
 
     private void ToggleHitBox(bool state)
     {
-        GameObject hitBox = transform.Find("BossHitBox").gameObject;
-        if (hitBox != null)
-        {
-            hitBox.SetActive(state);
-        }
+        var hb = transform.Find("EnemyHitBox");
+        if (hb != null) hb.gameObject.SetActive(state);
     }
 }
