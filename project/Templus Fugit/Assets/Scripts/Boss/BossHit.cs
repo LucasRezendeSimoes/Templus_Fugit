@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossHit : MonoBehaviour
 {
-    public int damage = 1; // Dano causado ao jogador (3 corações)
+    public int damage = 1; // Dano causado ao jogador
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -69,8 +69,6 @@ public class GameManager : MonoBehaviour
     [Header("Moedas")]
     public int coinCount = 0;
 
-    private Texture2D _coinTex;
-
     [Header("HUD de Vidas")]
     public Image[] heartsUI;  // Arraste aqui seus 3 objetos heart_0, heart_1 e heart_2 (UI Images)
 

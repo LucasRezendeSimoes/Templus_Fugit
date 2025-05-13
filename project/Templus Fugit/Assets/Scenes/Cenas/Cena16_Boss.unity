@@ -8283,7 +8283,7 @@ Transform:
   m_GameObject: {fileID: 436442841}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.14, z: 0}
+  m_LocalPosition: {x: 0, y: 0.18, z: 0}
   m_LocalScale: {x: 0.93, y: 0.93, z: 0.93}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -10119,7 +10119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1262696691}
   - component: {fileID: 1262696692}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10524,7 +10524,7 @@ GameObject:
   - component: {fileID: 1628574763}
   - component: {fileID: 1628574770}
   - component: {fileID: 1628574771}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CronosGFX
   m_TagString: Boss
   m_Icon: {fileID: 0}
@@ -10578,7 +10578,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!212 &1628574767
 SpriteRenderer:
@@ -10622,13 +10622,13 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1419893069
   m_SortingLayer: 7
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -1332049040, guid: 836ba81373ddf664c8a192783efe0ecd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.59, y: 0.53}
+  m_Size: {x: 2.5, y: 2.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -10644,7 +10644,7 @@ Animator:
   m_GameObject: {fileID: 1628574762}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fb7c18385ea5d91469f79702a8044b3a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -10686,18 +10686,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 679315467}
-  Idle: {fileID: 9100000, guid: fb7c18385ea5d91469f79702a8044b3a, type: 2}
-  Run: {fileID: 9100000, guid: 89abbda68d8fc2243bfdb272f3d5cce5, type: 2}
-  Attack: {fileID: 9100000, guid: 94828c757fc70584790a064c7ad208ef, type: 2}
-  TakeHit: {fileID: 0}
-  Death: {fileID: 9100000, guid: 7716deb1cb467624499494ddc3812033, type: 2}
-  maxHealth: 20
-  detectionRange: 5
-  attackRange: 2
-  attackCooldown: 2
-  hitCooldown: 2
-  healthBarPrefab: {fileID: 1852602047}
-  healthBarHeight: 1.2
+  AttackController: {fileID: 9100000, guid: 94828c757fc70584790a064c7ad208ef, type: 2}
+  DeathController: {fileID: 9100000, guid: e713f1fff3936604dbee6fb6f49d02d8, type: 2}
+  IdleController: {fileID: 9100000, guid: fb7c18385ea5d91469f79702a8044b3a, type: 2}
+  RunController: {fileID: 9100000, guid: 89abbda68d8fc2243bfdb272f3d5cce5, type: 2}
+  TakeHitController: {fileID: 9100000, guid: efdb3c6baececb14d982f3f293b9c5c8, type: 2}
+  vida: 100
+  attackRange: 1.7
+  DamageFlashTime: 0.2
+  detectionRange: 10
+  hitCooldown: 0
+  attackCooldown: 1.5
+  healthBar: {fileID: 1852602047}
 --- !u!70 &1628574771
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -10728,7 +10728,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -11301,6 +11301,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5808635522623278999, guid: b4047ab1220af35468a8b04d76e330de, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11333,13 +11337,13 @@ GameObject:
   - component: {fileID: 1856221230}
   - component: {fileID: 1856221231}
   - component: {fileID: 1856221234}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BossHitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1856221230
 Transform:
   m_ObjectHideFlags: 0
@@ -11389,7 +11393,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.62, y: -0.09}
+  m_Offset: {x: -0.02, y: -0.09}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -11399,7 +11403,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.54, y: 0.57}
+  m_Size: {x: 1.53, y: 1.26}
   m_EdgeRadius: 0
 --- !u!114 &1856221234
 MonoBehaviour:
@@ -11690,6 +11694,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 57282528368632198, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 598308522545718389, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1984979846246933369, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.02
@@ -11861,9 +11873,9 @@ SceneRoots:
   - {fileID: 197966603}
   - {fileID: 1091906065}
   - {fileID: 4114574889795105134}
+  - {fileID: 943563823}
   - {fileID: 436442845}
   - {fileID: 2040748212}
-  - {fileID: 943563823}
   - {fileID: 695907360}
   - {fileID: 1635254192}
   - {fileID: 234494169917613882}

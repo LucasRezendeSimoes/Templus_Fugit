@@ -19,7 +19,6 @@ public class ShopManager : MonoBehaviour
     [Header("Referências da UI")]
     [Tooltip("Arraste aqui o painel root da loja (ShopPanel)")]
     public GameObject      shopPanelRoot;
-    public Button          closeButton;
     public SlotUI[]        slots;        // tamanho = 2
 
     [Header("Flame Ball Prefab")]
@@ -44,9 +43,6 @@ public class ShopManager : MonoBehaviour
             Debug.LogError("ShopPanelRoot não foi atribuído no ShopManager!");
         else
             shopPanelRoot.SetActive(false);
-
-        if (closeButton != null)
-            closeButton.onClick.AddListener(CloseShop);
     }
 
     /// <summary>
@@ -71,6 +67,15 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        // Fechar a loja ao pressionar a tecla "ESQ" (Esc)
+        if (shopPanelRoot.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseShop();
+        }
+    }
+
     /// <summary>
     /// Tenta comprar o item no slot indicado.
     /// Para BamiEmber, já aplica o poder imediatamente.
@@ -91,7 +96,6 @@ public class ShopManager : MonoBehaviour
 
         if (item == ItemType.BamiEmber)
         {
-
             // Concede o poder da flame ball imediatamente
             if (flameBallPrefab != null)
             {
