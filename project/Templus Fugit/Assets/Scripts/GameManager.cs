@@ -62,11 +62,15 @@ public class GameManager : MonoBehaviour
     private bool _hasFlamePower = false;
     private GameObject _flameBallPrefab;
     public bool CanUseFlame => _hasFlamePower;
-    public int bamiEmberCount = 0;
     public GameObject FlameBallPrefab => _flameBallPrefab;
     [SerializeField] private Sprite flameBallIcon;       // atribuir no Inspector
     private Image _powerIconUI;
     private Image[] _cronosSlotImages;
+    [Tooltip("Dano base da Flame Ball")]
+    [SerializeField] private int baseFlameDamage = 10;
+    [Tooltip("Dano adicional por Brasa de Bami")]
+    [SerializeField] private int damagePerEmber = 10;
+    public int bamiEmberCount = 0;
     
     [Header("Moedas")]
     public int coinCount = 0;
@@ -526,13 +530,10 @@ public class GameManager : MonoBehaviour
         currentTime = gameTime;      // reset do tempo
 
         ResetRunData();              // limpa openedChests, etc.
-
-        // savedPositions.Clear();      // opcional: limpa todas as posições salvas
         previousScene = null;        // MUITO IMPORTANTE: impede a transição automática
+        savedPositions.Clear();      // opcional: limpa todas as posições salvas
 
-        // Limpa o dicionário de posições salvas
-        savedPositions.Clear();
-        SceneManager.LoadScene("GameOver");
+        SceneManager.LoadScene("Cena2"); // reinicia o jogo
     }
 
 
@@ -575,6 +576,16 @@ public class GameManager : MonoBehaviour
     // Adiciona um item ao inventário. Retorna `true` se coube.
     public bool AddInventoryItem(ItemType item)
     {
+        // --- evita duplicar Brasas de Bami ---
+        if (item == ItemType.BamiEmber)
+        {
+            // se já tiver uma brasa no inventário, não adiciona outra
+            for (int j = 0; j < inventory.Length; j++)
+                if (inventory[j] == ItemType.BamiEmber)
+                    return false;
+        }
+
+        // lógica normal de alocar um slot vazio
         for (int i = 0; i < inventory.Length; i++)
         {
             if (inventory[i] == ItemType.None)
@@ -655,24 +666,22 @@ public class GameManager : MonoBehaviour
     // chamado pelo BamiEmberCollectible:
     public void GrantFlamePower(GameObject flameBallPrefab)
     {
-        // sempre guardar o prefab
+        // guarda o prefab e habilita o uso
         _flameBallPrefab = flameBallPrefab;
-        // habilitar o poder
         _hasFlamePower = true;
 
-        // incrementar contador
+        // incrementa o contador de brasas
         bamiEmberCount++;
-        Debug.Log($"Brasa de Bami coletada! Total: {bamiEmberCount}");
+        Debug.Log($"Brasa de Bami adquirida! Total de Brasas: {bamiEmberCount}");
 
-        // atualiza ícone de power
+        // atualiza o ícone de poder (se houver)
         if (_powerIconUI != null)
             _powerIconUI.sprite = flameBallIcon;
     }
 
     public int GetFlameBallDamage()
     {
-        // Supondo dano base 10 + 5 por brasa
-        return 10 + 5 * bamiEmberCount;
+        return baseFlameDamage + damagePerEmber * bamiEmberCount;
     }
 
     public Sprite GetItemIcon(ItemType itemType)

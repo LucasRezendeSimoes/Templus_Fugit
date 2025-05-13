@@ -207,4 +207,4 @@ MonoBehaviour:
   speed: 10
   damage: 10
   launchClip: {fileID: 8300000, guid: 4ace8d91c2e04af45a8bdc140c9387e4, type: 3}
-  hitClip: {fileID: 8300000, guid: 021dcf3cbc64ebf48a6b81098e30b22d, type: 3}
+  hitClip: {fileID: 0}

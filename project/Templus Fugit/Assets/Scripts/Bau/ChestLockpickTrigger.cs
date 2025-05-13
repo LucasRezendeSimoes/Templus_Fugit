@@ -19,7 +19,7 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
 
     [Header("Recompensa em Brasa de Bami (Flame Ball)")]
     [Tooltip("Prefab da Flame Ball que será concedido ao jogador")]
-    public GameObject bamiEmberPrefab;
+    public GameObject FlameBallPrefab;
 
     [Header("Áudio")]
     [Tooltip("Som que toca ao abrir o baú")]
@@ -76,10 +76,10 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
         // Detecta cena atual
         string sceneName = SceneManager.GetActiveScene().name;
 
-        if (sceneName == "Cena2" && bamiEmberPrefab != null)
+        if (sceneName == "Cena2" && FlameBallPrefab != null)
         {
             // 1) Concede o poder de Flame Ball
-            GameManager.Instance.GrantFlamePower(bamiEmberPrefab);
+            GameManager.Instance.GrantFlamePower(FlameBallPrefab);
 
             // 2) Adiciona também a Brasa de Bami ao inventário
             bool added = GameManager.Instance.AddInventoryItem(ItemType.BamiEmber);

@@ -20,14 +20,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Limites do Cenário")]
     public float boundXEsquerda = -7.458932f;
-    public float boundXDireita = 7.458932f;
-    public float boundYBaixo = -2.997569f;
-    public float boundYCima = 35.39562f;
+    public float boundXDireita  =  7.458932f;
+    public float boundYBaixo     = -2.997569f;
+    public float boundYCima      = 35.39562f;
 
     [Header("Flame Ball")]
     [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject flameBallPrefab;
-    public int flameBallDamage = 10;
 
     [Header("Cooldown de Tiro")]
     [Tooltip("Tempo mínimo, em segundos, entre dois disparos de Flame Ball")]
@@ -36,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb2d;
     private Animator   animator;
-    private bool       canMove = true;
+    private bool       canMove     = true;
     private Vector2    _lastFacing = Vector2.right;
 
     [Header("Animações")]
@@ -53,9 +51,6 @@ public class PlayerController : MonoBehaviour
     private bool canBeHit = true;           // cooldown para receber dano
     public float hitCooldown = 2f;          // segundos de invencibilidade
 
-    [Header("Moedas")]
-    public int coinCount = 0;
-
     [Header("Áudio de Passos")]
     [Tooltip("Lista de clipes de passo; escolha aleatoriamente.")]
     public AudioClip[] footstepClips;
@@ -63,7 +58,7 @@ public class PlayerController : MonoBehaviour
     public float footstepInterval = 0.5f;
 
     private AudioSource _footstepSource;
-    private float       _footstepTimer = 0f;
+    private float       _footstepTimer  = 0f;
 
     void Start()
     {
@@ -74,7 +69,7 @@ public class PlayerController : MonoBehaviour
         // Cria e configura o AudioSource para passos
         _footstepSource = gameObject.AddComponent<AudioSource>();
         _footstepSource.playOnAwake = false;
-        _footstepSource.loop = false;
+        _footstepSource.loop       = false;
     }
 
     void Update()
@@ -166,24 +161,30 @@ public class PlayerController : MonoBehaviour
     {
         if (footstepClips != null && footstepClips.Length > 0)
         {
-            int idx = UnityEngine.Random.Range(0, footstepClips.Length);
+            int idx = Random.Range(0, footstepClips.Length);
             _footstepSource.PlayOneShot(footstepClips[idx]);
         }
     }
 
     private void HandleFire()
     {
-        if (!GameManager.Instance.CanUseFlame || flameBallPrefab == null || firePoint == null)
+        // só dispara se o jogador já tiver Flame Power
+        if (!GameManager.Instance.CanUseFlame || firePoint == null)
             return;
+
+        // pega o prefab da Flame Ball guardado no GameManager
+        var fbPrefab = GameManager.Instance.FlameBallPrefab;
+        if (fbPrefab == null) return;
 
         if (Time.time - _lastFireTime < fireCooldown) return;
 
         if (Input.GetKeyDown(fireKey))
         {
             _lastFireTime = Time.time;
-            var fb = Instantiate(flameBallPrefab, firePoint.position, Quaternion.identity)
+            // instancia usando o prefab e o dano atual
+            var fb = Instantiate(fbPrefab, firePoint.position, Quaternion.identity)
                      .GetComponent<FlameBall>();
-            fb.damage = flameBallDamage;
+            fb.damage = GameManager.Instance.GetFlameBallDamage();
             fb.Launch(_lastFacing);
         }
     }
@@ -192,8 +193,9 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(interactKey))
         {
-            Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
-            foreach (Collider2D interactable in interactables)
+            Collider2D[] interactables =
+                Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
+            foreach (var interactable in interactables)
             {
                 var obj = interactable.GetComponent<IInteractable>();
                 if (obj != null)

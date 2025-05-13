@@ -6,7 +6,7 @@ public class FlameBall : MonoBehaviour
 {
     [Header("Movimento & Dano")]
     public float speed = 10f;
-    public int   damage;    // definido pelo PlayerController
+    public int   damage;
 
     [Header("Áudio")]
     [Tooltip("Som ao lançar a bola de fogo")]
@@ -16,10 +16,14 @@ public class FlameBall : MonoBehaviour
 
     private Rigidbody2D rb2d;
     private AudioSource _audioSource;
+    private Collider2D  _collider;
+    private SpriteRenderer _spriteRenderer;
 
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        _collider = GetComponent<Collider2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         // Cria AudioSource para este projétil
         _audioSource = gameObject.AddComponent<AudioSource>();
         _audioSource.playOnAwake = false;
@@ -31,6 +35,10 @@ public class FlameBall : MonoBehaviour
     /// </summary>
     public void Launch(Vector2 direction)
     {
+        // Ajusta dano caso não tenha sido definido externamente
+        if (damage <= 0 && GameManager.Instance != null)
+            damage = GameManager.Instance.GetFlameBallDamage();
+
         // Orienta o projétil
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
@@ -70,20 +78,31 @@ public class FlameBall : MonoBehaviour
                 didHit = true;
             }
         }
-        // Se bateu no chão ou em qualquer outra coisa
+        // Toca no chão ou em obstáculo genérico
         else if (other.CompareTag("Ground"))
         {
             didHit = true;
         }
 
-        if (didHit)
-        {
-            // toca som de impacto
-            if (hitClip != null)
-                _audioSource.PlayOneShot(hitClip);
+        if (!didHit)
+            return;
 
-            // garante que o som toque antes de destruir
-            Destroy(gameObject, hitClip != null ? hitClip.length : 0f);
+        // Para o projétil e desativa colisão/visual
+        rb2d.velocity = Vector2.zero;
+        if (_collider != null)
+            _collider.enabled = false;
+        if (_spriteRenderer != null)
+            _spriteRenderer.enabled = false;
+
+        // Toca som de impacto e destrói após o áudio
+        if (hitClip != null)
+        {
+            _audioSource.PlayOneShot(hitClip);
+            Destroy(gameObject, hitClip.length);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }
