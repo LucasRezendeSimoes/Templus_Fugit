@@ -4702,7 +4702,7 @@ GameObject:
   - component: {fileID: 387711315}
   m_Layer: 6
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10811,6 +10811,10 @@ PrefabInstance:
       propertyPath: lockpickUI
       value: 
       objectReference: {fileID: 380938485}
+    - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
+      propertyPath: bamiEmberPrefab
+      value: 
+      objectReference: {fileID: 7536412701148278456, guid: b83a11e6a8cbe894ea1f8615f6c3fbb9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

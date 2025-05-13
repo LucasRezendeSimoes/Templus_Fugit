@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      slot_eye_oracle_0: -3559179709567021052
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

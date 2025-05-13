@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
     private bool _hasFlamePower = false;
     private GameObject _flameBallPrefab;
     public bool CanUseFlame => _hasFlamePower;
+    public int bamiEmberCount = 0;
     public GameObject FlameBallPrefab => _flameBallPrefab;
     [SerializeField] private Sprite flameBallIcon;       // atribuir no Inspector
     private Image _powerIconUI;
@@ -654,14 +655,24 @@ public class GameManager : MonoBehaviour
     // chamado pelo BamiEmberCollectible:
     public void GrantFlamePower(GameObject flameBallPrefab)
     {
-        _hasFlamePower = true;
+        // sempre guardar o prefab
         _flameBallPrefab = flameBallPrefab;
-        Debug.Log("Brasa de Bami coletada! Você agora pode lançar Flame Balls.");
+        // habilitar o poder
+        _hasFlamePower = true;
 
+        // incrementar contador
+        bamiEmberCount++;
+        Debug.Log($"Brasa de Bami coletada! Total: {bamiEmberCount}");
+
+        // atualiza ícone de power
         if (_powerIconUI != null)
-        {
             _powerIconUI.sprite = flameBallIcon;
-        }
+    }
+
+    public int GetFlameBallDamage()
+    {
+        // Supondo dano base 10 + 5 por brasa
+        return 10 + 5 * bamiEmberCount;
     }
 
     public Sprite GetItemIcon(ItemType itemType)

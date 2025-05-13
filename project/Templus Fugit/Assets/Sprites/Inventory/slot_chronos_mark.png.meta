@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      slot_chronos_mark_0: 1815671520880659785
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

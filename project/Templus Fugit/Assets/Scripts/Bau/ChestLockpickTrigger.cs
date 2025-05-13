@@ -17,6 +17,10 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
     [Header("Recompensa em Moedas")]
     public int coinReward = 5;
 
+    [Header("Recompensa em Brasa de Bami (Flame Ball)")]
+    [Tooltip("Prefab da Flame Ball que será concedido ao jogador")]
+    public GameObject bamiEmberPrefab;
+
     [Header("Áudio")]
     [Tooltip("Som que toca ao abrir o baú")]
     public AudioClip openChestClip;
@@ -39,7 +43,7 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
             GameManager.Instance.openedChests.Contains(chestID))
         {
             opened = true;
-            gameObject.SetActive(false);
+            // gameObject.SetActive(false);
         }
     }
 
@@ -69,13 +73,31 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
         if (!string.IsNullOrEmpty(chestID))
             GameManager.Instance.openedChests.Add(chestID);
 
-        // Dá a recompensa de moedas
-        var player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        // Detecta cena atual
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        if (sceneName == "Cena2" && bamiEmberPrefab != null)
         {
-            var pc = player.GetComponent<PlayerController>();
-            if (pc != null)
-                pc.AddCoins(coinReward);
+            // 1) Concede o poder de Flame Ball
+            GameManager.Instance.GrantFlamePower(bamiEmberPrefab);
+
+            // 2) Adiciona também a Brasa de Bami ao inventário
+            bool added = GameManager.Instance.AddInventoryItem(ItemType.BamiEmber);
+            if (!added)
+                Debug.LogWarning("Inventário cheio: não foi possível adicionar a Brasa de Bami.");
+
+            // Opcional: atualizar o ícone de poder ou de slot extra
+        }
+        else
+        {
+            // Lógica padrão: dá moedas
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                var pc = player.GetComponent<PlayerController>();
+                if (pc != null)
+                    pc.AddCoins(coinReward);
+            }
         }
 
         // Toca som de abertura
@@ -88,13 +110,13 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
         // Desativa o baú após o som tocar
         if (openChestClip != null)
             StartCoroutine(DeactivateAfterSound(openChestClip.length));
-        else
-            gameObject.SetActive(false);
     }
+
+
 
     private IEnumerator DeactivateAfterSound(float delay)
     {
         yield return new WaitForSeconds(delay);
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
     }
 }
