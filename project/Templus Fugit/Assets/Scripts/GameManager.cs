@@ -531,7 +531,7 @@ public class GameManager : MonoBehaviour
 
         // Limpa o dicionário de posições salvas
         savedPositions.Clear();
-        SceneManager.LoadScene("Cena2");
+        SceneManager.LoadScene("GameOver");
     }
 
 

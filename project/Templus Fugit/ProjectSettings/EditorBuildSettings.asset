@@ -60,7 +60,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/YouWin.unity
     guid: bc65fe22b565f8640875949840fdbc6b
   - enabled: 1
-    path: Assets/Scenes/Menus/Instructions.unity
+    path: Assets/Scenes/Menus/Credits.unity
     guid: 798c91d4871a1d44bbadb190ad2fbbb2
   - enabled: 1
     path: Assets/Scenes/Menus/VolumeGame.unity

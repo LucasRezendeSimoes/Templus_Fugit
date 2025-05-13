@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameOver : MonoBehaviour
+public class Credits : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -17,11 +17,7 @@ public class GameOver : MonoBehaviour
         
     }
 
-    public void ContinueGame() {
-        SceneManager.LoadScene("Cena2");
-    }
-
-    public void MainMenu() {
-        SceneManager.LoadScene(0);
+    public void LoadMainMenu(){
+        SceneManager.LoadScene("MainMenu");
     }
 }
