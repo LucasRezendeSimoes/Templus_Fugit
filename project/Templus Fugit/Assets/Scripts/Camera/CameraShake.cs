@@ -26,22 +26,28 @@ public class CameraShake : MonoBehaviour
         transform.localPosition = originalPosition;
     }
 
-    public IEnumerator ShakeContinuous(float magnitude)
+    public IEnumerator ShakeContinuous(float intensity, float duration)
     {
-        isShaking = true;
         Vector3 originalPosition = transform.localPosition;
 
-        while (isShaking)
+        while (true)
         {
-            float x = Random.Range(-1f, 1f) * magnitude;
-            float y = Random.Range(-1f, 1f) * magnitude;
+            float elapsed = 0f;
 
-            transform.localPosition = new Vector3(originalPosition.x + x, originalPosition.y + y, originalPosition.z);
+            while (elapsed < duration)
+            {
+                float offsetX = Random.Range(-1f, 1f) * intensity;
+                float offsetY = Random.Range(-1f, 1f) * intensity;
 
+                transform.localPosition = originalPosition + new Vector3(offsetX, offsetY, 0);
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            transform.localPosition = originalPosition;
             yield return null;
         }
-
-        transform.localPosition = originalPosition;
     }
 
     public void StopShake()

@@ -7859,6 +7859,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  IdleLeftController: {fileID: 0}
+  IdleRightController: {fileID: 0}
+  IdleTopController: {fileID: 0}
+  IdleBotController: {fileID: 0}
+  WalkLeftController: {fileID: 0}
+  WalkRightController: {fileID: 0}
+  WalkTopController: {fileID: 0}
+  WalkBotController: {fileID: 0}
+  AttackLeftController: {fileID: 0}
+  AttackRightController: {fileID: 0}
+  AttackTopController: {fileID: 0}
+  AttackBotController: {fileID: 0}
+  HitLeftController: {fileID: 0}
+  HitRightController: {fileID: 0}
+  HitTopController: {fileID: 0}
+  HitBotController: {fileID: 0}
+  DeathLeftController: {fileID: 0}
+  DeathRightController: {fileID: 0}
+  DeathTopController: {fileID: 0}
+  DeathBotController: {fileID: 0}
+  vida: 50
+  detectionRange: 10
+  attackRange: 1.5
+  attackCooldown: 1
+  hitCooldown: 0.5
+  damageFlashTime: 0.2
+  healthBarPrefab: {fileID: 0}
+  healthBarOffset: {x: 0, y: 1, z: 0}
 --- !u!1001 &442207091
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8335,6 +8363,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  IdleLeftController: {fileID: 0}
+  IdleRightController: {fileID: 0}
+  IdleTopController: {fileID: 0}
+  IdleBotController: {fileID: 0}
+  WalkLeftController: {fileID: 0}
+  WalkRightController: {fileID: 0}
+  WalkTopController: {fileID: 0}
+  WalkBotController: {fileID: 0}
+  AttackLeftController: {fileID: 0}
+  AttackRightController: {fileID: 0}
+  AttackTopController: {fileID: 0}
+  AttackBotController: {fileID: 0}
+  HitLeftController: {fileID: 0}
+  HitRightController: {fileID: 0}
+  HitTopController: {fileID: 0}
+  HitBotController: {fileID: 0}
+  DeathLeftController: {fileID: 0}
+  DeathRightController: {fileID: 0}
+  DeathTopController: {fileID: 0}
+  DeathBotController: {fileID: 0}
+  vida: 50
+  detectionRange: 10
+  attackRange: 1.5
+  attackCooldown: 1
+  hitCooldown: 0.5
+  damageFlashTime: 0.2
+  healthBarPrefab: {fileID: 0}
+  healthBarOffset: {x: 0, y: 1, z: 0}
 --- !u!1 &732668615
 GameObject:
   m_ObjectHideFlags: 0
@@ -8656,6 +8712,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  IdleLeftController: {fileID: 0}
+  IdleRightController: {fileID: 0}
+  IdleTopController: {fileID: 0}
+  IdleBotController: {fileID: 0}
+  WalkLeftController: {fileID: 0}
+  WalkRightController: {fileID: 0}
+  WalkTopController: {fileID: 0}
+  WalkBotController: {fileID: 0}
+  AttackLeftController: {fileID: 0}
+  AttackRightController: {fileID: 0}
+  AttackTopController: {fileID: 0}
+  AttackBotController: {fileID: 0}
+  HitLeftController: {fileID: 0}
+  HitRightController: {fileID: 0}
+  HitTopController: {fileID: 0}
+  HitBotController: {fileID: 0}
+  DeathLeftController: {fileID: 0}
+  DeathRightController: {fileID: 0}
+  DeathTopController: {fileID: 0}
+  DeathBotController: {fileID: 0}
+  vida: 50
+  detectionRange: 10
+  attackRange: 1.5
+  attackCooldown: 1
+  hitCooldown: 0.5
+  damageFlashTime: 0.2
+  healthBarPrefab: {fileID: 0}
+  healthBarOffset: {x: 0, y: 1, z: 0}
 --- !u!1 &841204412
 GameObject:
   m_ObjectHideFlags: 0
@@ -9159,6 +9243,7 @@ GameObject:
   - component: {fileID: 1173312576}
   - component: {fileID: 1173312575}
   - component: {fileID: 1173312578}
+  - component: {fileID: 1173312579}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -9256,6 +9341,18 @@ MonoBehaviour:
   smoothSpeed: 1
   minCameraBounds: {x: 0, y: -0.53, z: 0}
   maxCameraBounds: {x: 0, y: -0.53, z: 0}
+--- !u!114 &1173312579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173312574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d478ebfb8a33ac440b08e99b140ea1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1205927700
 GameObject:
   m_ObjectHideFlags: 0
@@ -9505,17 +9602,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1555096402852711252, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555096402852711252, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555096402852711252, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5728495640216990608, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: m_Name
       value: Puzzle
       objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 1173312576}
     - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 1947580042}
     - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: penaltyTime
-      value: 10
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: difficultyLevel
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: playerController

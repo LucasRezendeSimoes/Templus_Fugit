@@ -45,7 +45,7 @@ public class MemoryFragment : MonoBehaviour, IInteractable
             CameraShake cameraShake = mainCamera.GetComponent<CameraShake>();
             if (cameraShake != null)
             {
-                cameraShakeCoroutine = StartCoroutine(cameraShake.ShakeContinuous(0.1f)); // Tremor contínuo
+                cameraShakeCoroutine = StartCoroutine(cameraShake.ShakeContinuous(0.1f, 0.5f)); // Tremor contínuo
             }
         }
     }

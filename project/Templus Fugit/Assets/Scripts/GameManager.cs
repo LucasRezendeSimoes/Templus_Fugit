@@ -13,7 +13,7 @@ public enum ItemType
     Hourglass     = 3,
     BrokenWatch   = 4,
     BamiEmber     = 5, 
-    // Key        = 5,
+    // OracleEye     = 6,
 }
 
 public class GameManager : MonoBehaviour
@@ -65,12 +65,24 @@ public class GameManager : MonoBehaviour
     public GameObject FlameBallPrefab => _flameBallPrefab;
     [SerializeField] private Sprite flameBallIcon;       // atribuir no Inspector
     private Image _powerIconUI;
+    private Image[] _cronosSlotImages;
     
     [Header("Moedas")]
     public int coinCount = 0;
 
     [Header("HUD de Vidas")]
     public Image[] heartsUI;  // Arraste aqui seus 3 objetos heart_0, heart_1 e heart_2 (UI Images)
+
+    [Header("Soundtrack")]
+    [Tooltip("Arraste aqui as 3 músicas na ordem que devem tocar")]
+    public AudioClip[] soundtrack;
+    [Tooltip("Tempo em segundos para cross‐fade entre faixas")]
+    public float crossfadeDuration = 2f;
+
+    // componentes internos
+    private AudioSource[] _musicSources = new AudioSource[2];
+    private int           _activeSource;
+    private int           _nextClipIndex;
 
     // Dicionário para armazenar a última posição do jogador em cada cena
     private Dictionary<string, Vector3?> savedPositions = new Dictionary<string, Vector3?>();
@@ -126,6 +138,26 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // --- SETUP DO AUDIO ---
+            for (int i = 0; i < 2; i++)
+            {
+                var src = gameObject.AddComponent<AudioSource>();
+                src.playOnAwake = false;
+                src.loop        = false;
+                src.volume      = (i == 0) ? 1f : 0f;
+                _musicSources[i] = src;
+            }
+
+            if (soundtrack != null && soundtrack.Length > 0)
+            {
+                // toca a primeira faixa
+                _musicSources[0].clip = soundtrack[0];
+                _musicSources[0].Play();
+                _nextClipIndex = 1 % soundtrack.Length;
+                StartCoroutine(PlaylistCoroutine());
+            }
+            // --- FIM SETUP AUDIO ---
 
             // Instancia o HUD apenas 1x
             if (!_hudCreated && hudPrefab != null)
@@ -213,12 +245,70 @@ public class GameManager : MonoBehaviour
                     _powerIconUI = powerIconTf.GetComponent<Image>();
                 else
                     Debug.LogError("GameManager: não achei HUD/PowerPanel/PowerIcon no prefab!");
+                // // procura o CronosPowerPanel
+                // var cronosPanelTf = hud.transform.Find("HUD/CronosPowerPanel");
+                // if (cronosPanelTf == null)
+                //     Debug.LogError("GameManager: não achei HUD/CronosPowerPanel!");
+                // else {
+                //     _cronosSlotImages = new Image[2];
+                //     for (int i = 0; i < 2; i++) {
+                //         // cada slot tem a hierarquia CronosPowerPanel/Slot_{i+1}/Panel
+                //         var panel = cronosPanelTf.Find($"Slot_{i+1}/Panel");
+                //         if (panel != null)
+                //             _cronosSlotImages[i] = panel.GetComponent<Image>();
+                //         else
+                //             Debug.LogWarning($"GameManager: faltando Slot_{i+1}/Panel em CronosPowerPanel");
+                //         // inicializa vazio
+                //         if (_cronosSlotImages[i] != null)
+                //             _cronosSlotImages[i].sprite = emptySlotSprite;
+                //     }
+                // }
             }
         }
         else
         {
             Destroy(gameObject);
             return;
+        }
+    }
+
+    private IEnumerator PlaylistCoroutine()
+    {
+        while (true)
+        {
+            var active   = _musicSources[_activeSource];
+            float remain = active.clip.length - active.time;
+
+            // espera até faltar exatamente crossfadeDuration
+            yield return new WaitForSeconds(Mathf.Max(0, remain - crossfadeDuration));
+
+            // prepara o outro source
+            int nextSrcIdx   = 1 - _activeSource;
+            var incoming     = _musicSources[nextSrcIdx];
+            incoming.clip    = soundtrack[_nextClipIndex];
+            incoming.time    = 0f;
+            incoming.volume  = 0f;
+            incoming.Play();
+
+            // faz o fade entre os dois
+            float t = 0f;
+            while (t < crossfadeDuration)
+            {
+                t += Time.deltaTime;
+                float f = t / crossfadeDuration;
+                active.volume   = Mathf.Lerp(1f, 0f, f);
+                incoming.volume = Mathf.Lerp(0f, 1f, f);
+                yield return null;
+            }
+
+            // finalize
+            active.Stop();
+            active.volume      = 1f;
+            incoming.volume    = 1f;
+
+            // avança índices
+            _activeSource    = nextSrcIdx;
+            _nextClipIndex   = (_nextClipIndex + 1) % soundtrack.Length;
         }
     }
 
@@ -582,6 +672,13 @@ public class GameManager : MonoBehaviour
         return emptySlotSprite;
     }
 
+    private void SetCronosPowerSlot(int slotIdx, ItemType item)
+    {
+        if (_cronosSlotImages == null) return;
+        if (slotIdx < 0 || slotIdx >= _cronosSlotImages.Length) return;
+        _cronosSlotImages[slotIdx].sprite = GetItemIcon(item);
+    }
+
     // Usa (consome) o item naquele slot e aplica o efeito.
     public void UseInventoryItem(int slotIndex)
     {
@@ -611,6 +708,16 @@ public class GameManager : MonoBehaviour
             case ItemType.BamiEmber: // brasa de Bami
                 GrantFlamePower(_flameBallPrefab);
                 return; // não remove do inventário
+            // case ItemType.OracleEye:
+            //     SetCronosPowerSlot(0, ItemType.OracleEye);
+            //     RemoveInventoryItem(slotIndex);
+            //     return;
+
+            // case ItemType.CronosMark:   // assim que definir essa enum
+            //     Debug.Log("Usou Marca de Cronos!");
+            //     SetCronosPowerSlot(1, ItemType.CronosMark);
+            //     RemoveInventoryItem(slotIndex);
+            //     return;
         }
 
         // remove do inventário

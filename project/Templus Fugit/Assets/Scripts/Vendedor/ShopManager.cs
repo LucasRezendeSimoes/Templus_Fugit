@@ -18,13 +18,18 @@ public class ShopManager : MonoBehaviour
 
     [Header("Referências da UI")]
     [Tooltip("Arraste aqui o painel root da loja (ShopPanel)")]
-    public GameObject      shopPanelRoot;
-    public SlotUI[]        slots;        // tamanho = 2
+    public GameObject shopPanelRoot;
+    public SlotUI[]   slots;        // tamanho = 2
 
     [Header("Flame Ball Prefab")]
     [Tooltip("Arraste aqui o prefab da FlameBall usado no GameManager")]
-    public GameObject      flameBallPrefab;
+    public GameObject flameBallPrefab;
 
+    [Header("Áudio")]
+    [Tooltip("Som a tocar quando a compra for bem sucedida")]
+    public AudioClip purchaseSound;
+
+    private AudioSource _audioSource;
     private List<ItemType> shopItems;
     private int[]          prices;
 
@@ -32,7 +37,9 @@ public class ShopManager : MonoBehaviour
     {
         // Singleton
         if (Instance == null)
+        {
             Instance = this;
+        }
         else
         {
             Destroy(gameObject);
@@ -43,6 +50,17 @@ public class ShopManager : MonoBehaviour
             Debug.LogError("ShopPanelRoot não foi atribuído no ShopManager!");
         else
             shopPanelRoot.SetActive(false);
+
+        // Prepara AudioSource para efeitos de UI
+        _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource.playOnAwake = false;
+    }
+
+    void Update()
+    {
+        // Fecha a loja ao pressionar ESC
+        if (shopPanelRoot.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+            CloseShop();
     }
 
     /// <summary>
@@ -67,24 +85,15 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        // Fechar a loja ao pressionar a tecla "ESQ" (Esc)
-        if (shopPanelRoot.activeSelf && Input.GetKeyDown(KeyCode.Escape))
-        {
-            CloseShop();
-        }
-    }
-
     /// <summary>
     /// Tenta comprar o item no slot indicado.
-    /// Para BamiEmber, já aplica o poder imediatamente.
     /// </summary>
     private void TryBuy(int index)
     {
         var item = shopItems[index];
         int cost = prices[index];
 
+        // Falta de moedas
         if (GameManager.Instance.coinCount < cost)
         {
             Debug.Log("Você não tem moedas suficientes!");
@@ -94,23 +103,29 @@ public class ShopManager : MonoBehaviour
         // Desconta moedas
         GameManager.Instance.AddCoins(-cost);
 
+        // Aplica o efeito do item
         if (item == ItemType.BamiEmber)
         {
-            // Concede o poder da flame ball imediatamente
             if (flameBallPrefab != null)
             {
                 GameManager.Instance.AddInventoryItem(item);
                 GameManager.Instance.GrantFlamePower(flameBallPrefab);
             }
             else
+            {
                 Debug.LogWarning("FlameBallPrefab não atribuído no ShopManager.");
+            }
         }
         else
         {
-            // Adiciona ao inventário normalmente
             GameManager.Instance.AddInventoryItem(item);
         }
 
+        // Toca som de confirmação
+        if (purchaseSound != null)
+            _audioSource.PlayOneShot(purchaseSound);
+
+        // Fecha a loja
         CloseShop();
     }
 

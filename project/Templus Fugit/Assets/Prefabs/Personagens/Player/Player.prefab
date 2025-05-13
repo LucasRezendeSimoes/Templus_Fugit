@@ -225,6 +225,7 @@ MonoBehaviour:
   boundYCima: 2.016829
   firePoint: {fileID: 4458810485262571255}
   flameBallPrefab: {fileID: 7533349701157117235, guid: 2ec50226892819c459c23c0c40ef2007, type: 3}
+  flameBallDamage: 50
   fireCooldown: 0.5
   andarCima: {fileID: 9100000, guid: b6c377b2ea2cf5d44ade3abf112cbc35, type: 2}
   andarBaixo: {fileID: 9100000, guid: 9196e18e9fe1e804497710eca0ee5590, type: 2}
@@ -236,6 +237,10 @@ MonoBehaviour:
   paradoDireita: {fileID: 9100000, guid: 1dad070368fdfd14d90f092146e29332, type: 2}
   hitCooldown: 2
   coinCount: 0
+  footstepClips:
+  - {fileID: 8300000, guid: 24b77be6d254a3348b0a5eb7144e5e72, type: 3}
+  - {fileID: 8300000, guid: 449624e6780dfda4b9ef6d156fa12662, type: 3}
+  footstepInterval: 0.5
 --- !u!1 &6813025626610688925
 GameObject:
   m_ObjectHideFlags: 0

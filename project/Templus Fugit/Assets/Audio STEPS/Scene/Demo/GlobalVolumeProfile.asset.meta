@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5060be1ea12c7ff4687e339f191137ed
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 217791
+  packageName: steps
+  packageVersion: 1.0.1
+  assetPath: Assets/Audio STEPS/Scene/Demo/GlobalVolumeProfile.asset
+  uploadId: 491844

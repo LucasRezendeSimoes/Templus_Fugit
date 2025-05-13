@@ -4415,6 +4415,10 @@ PrefabInstance:
       value: -6.335011
       objectReference: {fileID: 0}
     - target: {fileID: 3813222758382759279, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
+      propertyPath: flameBallDamage
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3813222758382759279, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
       propertyPath: interactableLayer.m_Bits
       value: 4096
       objectReference: {fileID: 0}
@@ -9781,6 +9785,7 @@ MonoBehaviour:
     icon: {fileID: 2068667233}
     priceText: {fileID: 1188429785}
   flameBallPrefab: {fileID: 7533349701157117235, guid: 2ec50226892819c459c23c0c40ef2007, type: 3}
+  purchaseSound: {fileID: 8300000, guid: 205fd9bc4f3966b41931c0519fcd79ea, type: 3}
 --- !u!4 &643287358
 Transform:
   m_ObjectHideFlags: 0

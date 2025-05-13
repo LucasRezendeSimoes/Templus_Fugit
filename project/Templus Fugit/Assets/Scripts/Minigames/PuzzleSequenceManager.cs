@@ -19,8 +19,22 @@ public class PuzzleSequenceManager : MonoBehaviour
 
     public int difficultyLevel = 1;               // Nível de dificuldade (1 = fácil, aumenta com o tempo)
 
+    public Camera mainCamera; // Referência à câmera principal
+    private Coroutine cameraShakeCoroutine; // Referência para o tremor da câmera
+
     void Start()
     {
+        // Inicia o tremor da câmera
+        if (mainCamera != null)
+        {
+            CameraShake cameraShake = mainCamera.GetComponent<CameraShake>();
+            if (cameraShake != null)
+            {
+                float shakeIntensity = 0.025f * difficultyLevel; // Intensidade aumenta com a dificuldade
+                float shakeDuration = 0.5f / difficultyLevel;  // Duração diminui com a dificuldade
+                cameraShakeCoroutine = StartCoroutine(cameraShake.ShakeContinuous(shakeIntensity, shakeDuration)); // Tremor contínuo
+            }
+        }
         GenerateRandomSequence(5 * difficultyLevel); // Gera uma sequência baseada na dificuldade
         UpdateSequenceText();
 
@@ -90,6 +104,17 @@ public class PuzzleSequenceManager : MonoBehaviour
     void PuzzleSolved()
     {
         puzzleCompleted = true;
+
+        // Para o tremor da câmera
+        if (cameraShakeCoroutine != null && mainCamera != null)
+        {
+            CameraShake cameraShake = mainCamera.GetComponent<CameraShake>();
+            if (cameraShake != null)
+            {
+                StopCoroutine(cameraShakeCoroutine); // Para o tremor contínuo
+                cameraShake.StopShake(); // Garante que o tremor pare
+            }
+        }
 
         // Reativar o movimento do jogador ao resolver o puzzle
         if (playerController != null)

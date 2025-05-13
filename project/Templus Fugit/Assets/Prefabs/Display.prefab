@@ -66,3 +66,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  soundtrack:
+  - {fileID: 8300000, guid: 157889a6ba311c94db349777707741b8, type: 3}
+  - {fileID: 8300000, guid: f8c1198d3053a0b408f965e0eee79ecf, type: 3}
+  - {fileID: 8300000, guid: fdcf7edfcf36a3b44b8b21fe528796e0, type: 3}
+  crossfadeDuration: 2

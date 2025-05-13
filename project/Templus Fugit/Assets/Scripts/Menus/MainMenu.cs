@@ -5,40 +5,45 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GUISkin layout; // Fonte do placar
-    // Start is called before the first frame update
+    // public GUISkin layout; // Fonte do placar
+
+    private AudioSource _audioSource;
+
     void Start()
     {
-        
+        // Pega (ou adiciona) o AudioSource e toca a música
+        _audioSource = GetComponent<AudioSource>();
+
+        // Se você não marcou "Play On Awake" no Inspector:
+        if (!_audioSource.playOnAwake)
+        {
+            _audioSource.loop = true;   // repete a faixa
+            _audioSource.Play();        // inicia a música
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    // void OnGUI()
+    // {
+    //     GUI.skin = layout;
+    // }
+
+    public void PlayGame()
     {
-        
-    }
-
-    void OnGUI() {
-        GUI.skin = layout;
-    }
-
-    public void PlayGame() {
-        // GameManager.Instance.ResetRunData(); // Reseta os dados do jogo antes de iniciar
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public void Instructions() {
-        // Carrega a cena de instruções
+    public void Instructions()
+    {
         SceneManager.LoadScene("Instructions");
     }
 
-    public void Volume() {
-        // Carrega a cena de volume
+    public void Volume()
+    {
         SceneManager.LoadScene("VolumeGame");
     }
 
-    public void QuitGame() {
-        // Fecha o jogo
+    public void QuitGame()
+    {
         Application.Quit();
     }
 }

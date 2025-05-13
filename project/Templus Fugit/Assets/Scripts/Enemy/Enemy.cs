@@ -5,104 +5,175 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("References")]
+    enum Facing { Left, Right, Up, Down }
+    enum State  { Idle, Walk, Attack, Hit, Death }
+
+    [Header("Referências")]
     public Transform target;
-    public float     detectionRange = 8f;
-    public float     attackRange    = 1.2f;
-    public float     attackCooldown = 1f;
-    public int       maxHealth      = 30;
-    public float     hitCooldown    = 0.5f;
-    public float     flashTime      = 0.1f;
-
-    [Header("Animators")]
-    public RuntimeAnimatorController idleAnim;
-    public RuntimeAnimatorController runAnim;
-    public RuntimeAnimatorController attackAnim;
-    public RuntimeAnimatorController hitAnim;
-    public RuntimeAnimatorController deathAnim;
-
-    [Header("Health Bar")]
-    [SerializeField] private HealthBar _healthBarPrefab;      // assign no Inspector
-    [SerializeField] private float     _healthBarHeight = 1.2f;
-    private HealthBar _healthBarInstance;
 
     private NavMeshAgent agent;
     private Animator     animator;
-    private Rigidbody2D  rb;
+    private Rigidbody2D  rb2d;
 
-    private int   currentHealth;
-    private bool  canAttack = true;
-    private bool  canBeHit  = true;
-    private float lastAttack;
+    [Header("Animadores por Estado e Direção")]
+    public RuntimeAnimatorController IdleLeftController,  IdleRightController,  IdleTopController,  IdleBotController;
+    public RuntimeAnimatorController WalkLeftController,  WalkRightController,  WalkTopController,  WalkBotController;
+    public RuntimeAnimatorController AttackLeftController,AttackRightController,AttackTopController,AttackBotController;
+    public RuntimeAnimatorController HitLeftController,   HitRightController,   HitTopController,   HitBotController;
+    public RuntimeAnimatorController DeathLeftController,DeathRightController,DeathTopController,DeathBotController;
+
+    [Header("Parâmetros de Combate")]
+    public int   vida            = 50;
+    public float detectionRange  = 10f;
+    public float attackRange     = 1.5f;
+    public float attackCooldown  = 1f;
+    public float hitCooldown     = 0.5f;
+    public float damageFlashTime = 0.2f;
+
+    private Facing currentFacing = Facing.Left;
+    private int    currentHealth;
+    private bool   canAttack     = true;
+    private bool   canBeHit      = true;
+    private float  lastAttackTime;
+
+    [Header("Barra de Vida")]
+    [Tooltip("Arraste aqui o prefab da HealthBar")]
+    public HealthBar healthBarPrefab;
+    [Tooltip("Offset da barra acima do inimigo")]
+    public Vector3   healthBarOffset = new Vector3(0, 1, 0);
+
+    // INSTÂNCIA criada em cena
+    private HealthBar healthBarInstance;
 
     void Start()
     {
-        currentHealth = maxHealth;
-
-        // instancia a barra
-        if (_healthBarPrefab != null)
-        {
-            var container = GameObject.Find("HealthBars")?.transform; // ou "HealthBar", conforme vc nomear
-            if (container != null)
-            {
-                _healthBarInstance = Instantiate(_healthBarPrefab, container);
-                _healthBarInstance.Initialize(transform, Vector3.up * _healthBarHeight);
-                _healthBarInstance.SetHealthPercent(1f);
-            }
-        }
+        currentHealth = vida;
 
         agent    = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        rb       = GetComponent<Rigidbody2D>();
-
+        rb2d     = GetComponent<Rigidbody2D>();
         agent.updateRotation = false;
         agent.updateUpAxis   = false;
+
+        // 1) Instancia a barra de vida na cena
+        if (healthBarPrefab != null)
+        {
+            healthBarInstance = Instantiate(
+                healthBarPrefab,
+                transform.position + healthBarOffset,
+                Quaternion.identity,
+                // opcional: se tiver um GameObject pai para as barras
+                GameObject.Find("HealthBars")?.transform
+            );
+
+            // 2) inicializa e seta como cheia
+            healthBarInstance.Initialize(transform, healthBarOffset);
+            healthBarInstance.SetHealthPercent(1f);
+        }
     }
 
     void Update()
     {
+        // 3) Atualiza a instância, não o prefab
+        if (healthBarInstance != null)
+            healthBarInstance.SetHealthPercent(currentHealth / (float)vida);
+
+        // lógica de stun/invisibilidade
         if (GameManager.Instance.IsTimeStopped || GameManager.Instance.IsInvisible)
         {
-            agent.isStopped                  = true;
-            animator.runtimeAnimatorController = idleAnim;
+            PlayAnimation(State.Idle);
+            agent.isStopped = true;
+            return;
+        }
+
+        // se morreu
+        if (currentHealth <= 0)
+        {
+            Die();
             return;
         }
 
         float dist = Vector2.Distance(transform.position, target.position);
+        currentFacing = CalculateFacing();
 
         if (dist > detectionRange)
         {
-            // idle
-            agent.isStopped                  = true;
-            animator.runtimeAnimatorController = idleAnim;
-            ToggleHitBox(false);
+            agent.isStopped = true;
+            PlayAnimation(State.Idle);
         }
         else if (dist > attackRange)
         {
-            // persegue
-            agent.isStopped                  = false;
+            agent.isStopped = false;
             agent.SetDestination(target.position);
-            animator.runtimeAnimatorController = runAnim;
-            FlipTowards(target.position);
-            ToggleHitBox(false);
+            PlayAnimation(State.Walk);
         }
         else
         {
-            // ataca
             agent.isStopped = true;
-            FlipTowards(target.position);
-            if (Time.time - lastAttack >= attackCooldown && canAttack)
+            if (canAttack && Time.time - lastAttackTime >= attackCooldown)
+            {
                 StartCoroutine(DoAttack());
+                lastAttackTime = Time.time;
+            }
         }
     }
 
-    private IEnumerator DoAttack()
+    Facing CalculateFacing()
+    {
+        Vector3 dir = (target.position - transform.position).normalized;
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+            return dir.x > 0 ? Facing.Right : Facing.Left;
+        else
+            return dir.y > 0 ? Facing.Up : Facing.Down;
+    }
+
+    void PlayAnimation(State state)
+    {
+        RuntimeAnimatorController ctrl = null;
+        switch (state)
+        {
+            case State.Idle:
+                if (currentFacing == Facing.Left)  ctrl = IdleLeftController;
+                if (currentFacing == Facing.Right) ctrl = IdleRightController;
+                if (currentFacing == Facing.Up)    ctrl = IdleTopController;
+                if (currentFacing == Facing.Down)  ctrl = IdleBotController;
+                break;
+            case State.Walk:
+                if (currentFacing == Facing.Left)  ctrl = WalkLeftController;
+                if (currentFacing == Facing.Right) ctrl = WalkRightController;
+                if (currentFacing == Facing.Up)    ctrl = WalkTopController;
+                if (currentFacing == Facing.Down)  ctrl = WalkBotController;
+                break;
+            case State.Attack:
+                if (currentFacing == Facing.Left)  ctrl = AttackLeftController;
+                if (currentFacing == Facing.Right) ctrl = AttackRightController;
+                if (currentFacing == Facing.Up)    ctrl = AttackTopController;
+                if (currentFacing == Facing.Down)  ctrl = AttackBotController;
+                break;
+            case State.Hit:
+                if (currentFacing == Facing.Left)  ctrl = HitLeftController;
+                if (currentFacing == Facing.Right) ctrl = HitRightController;
+                if (currentFacing == Facing.Up)    ctrl = HitTopController;
+                if (currentFacing == Facing.Down)  ctrl = HitBotController;
+                break;
+            case State.Death:
+                if (currentFacing == Facing.Left)  ctrl = DeathLeftController;
+                if (currentFacing == Facing.Right) ctrl = DeathRightController;
+                if (currentFacing == Facing.Up)    ctrl = DeathTopController;
+                if (currentFacing == Facing.Down)  ctrl = DeathBotController;
+                break;
+        }
+        if (ctrl != null && animator.runtimeAnimatorController != ctrl)
+            animator.runtimeAnimatorController = ctrl;
+    }
+
+    IEnumerator DoAttack()
     {
         canAttack = false;
-        lastAttack = Time.time;
 
-        animator.runtimeAnimatorController = attackAnim;
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        PlayAnimation(State.Attack);
+        var clipLen = animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(clipLen);
 
         var hb = transform.Find("EnemyHitBox")?.gameObject;
         if (hb != null)
@@ -112,7 +183,7 @@ public class Enemy : MonoBehaviour
             hb.SetActive(false);
         }
 
-        animator.runtimeAnimatorController = idleAnim;
+        PlayAnimation(State.Idle);
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
     }
@@ -121,58 +192,42 @@ public class Enemy : MonoBehaviour
     {
         if (!canBeHit) return;
 
-        // 1) Subtrai vida e atualiza UI
-        currentHealth = Mathf.Clamp(currentHealth - dmg, 0, maxHealth);
-        _healthBarInstance?.SetHealthPercent(currentHealth / (float)maxHealth);
+        currentHealth -= dmg;
+        canBeHit = false;
 
-        // 2) Se morreu, mata e sai
         if (currentHealth <= 0)
         {
+            PlayAnimation(State.Death);
             Die();
-            return;
         }
-
-        // 3) flash + cooldown de hit
-        canBeHit = false;
-        StartCoroutine(FlashRed());
-        StartCoroutine(ResetHitCooldown());
+        else
+        {
+            StartCoroutine(FlashRed());
+            PlayAnimation(State.Hit);
+            StartCoroutine(ResetHitCooldown());
+        }
     }
 
-    private IEnumerator ResetHitCooldown()
+    IEnumerator ResetHitCooldown()
     {
         yield return new WaitForSeconds(hitCooldown);
         canBeHit = true;
     }
 
-    private IEnumerator FlashRed()
+    IEnumerator FlashRed()
     {
         var sr = GetComponentInChildren<SpriteRenderer>();
         if (sr != null)
         {
             sr.color = Color.red;
-            yield return new WaitForSeconds(flashTime);
+            yield return new WaitForSeconds(damageFlashTime);
             sr.color = Color.white;
         }
     }
 
-    private void Die()
+    void Die()
     {
-        if (_healthBarInstance != null)
-            Destroy(_healthBarInstance.gameObject);
-        animator.runtimeAnimatorController = deathAnim;
         agent.isStopped = true;
-        Destroy(gameObject, 1f);
-    }
-
-    private void FlipTowards(Vector3 pos)
-    {
-        var dir = pos - transform.position;
-        transform.eulerAngles = dir.x > 0 ? Vector3.zero : new Vector3(0,180,0);
-    }
-
-    private void ToggleHitBox(bool v)
-    {
-        var hb = transform.Find("EnemyHitBox")?.gameObject;
-        if (hb!=null) hb.SetActive(v);
+        Destroy(gameObject, 0.4f);
     }
 }

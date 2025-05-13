@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Collections.Generic;
+
 
 public class ChestLockpickTrigger : MonoBehaviour, IInteractable
 {
@@ -14,9 +17,10 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
     [Header("Recompensa em Moedas")]
     public int coinReward = 5;
 
-    // [Header("Recompensa")]
-    // public GameObject rewardPrefab;
-    // public Transform rewardSpawnPoint;
+    [Header("Áudio")]
+    [Tooltip("Som que toca ao abrir o baú")]
+    public AudioClip openChestClip;
+    private AudioSource _audioSource;
 
     private bool opened = false;
 
@@ -25,6 +29,10 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
         // Pega a referência ao minigame
         if (lockpickUI != null)
             minigame = lockpickUI.GetComponent<LockpickMinigame>();
+
+        // Configura AudioSource para o baú
+        _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource.playOnAwake = false;
 
         // Se já estiver aberto nesta run, desative o baú
         if (!string.IsNullOrEmpty(chestID) &&
@@ -54,19 +62,14 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
     // Callback executado quando o minigame devolve sucesso
     private void UnlockChest()
     {
+        if (opened) return;
         opened = true;
 
         // Marca como aberto no GameManager
         if (!string.IsNullOrEmpty(chestID))
             GameManager.Instance.openedChests.Add(chestID);
 
-        // Instancia a recompensa
-        // if (rewardPrefab != null && rewardSpawnPoint != null)
-        //     Instantiate(
-        //         rewardPrefab,
-        //         rewardSpawnPoint.position,
-        //         rewardSpawnPoint.rotation
-        //     );
+        // Dá a recompensa de moedas
         var player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -75,10 +78,23 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
                 pc.AddCoins(coinReward);
         }
 
-        // Aqui você pode disparar uma animação (opcional)
-        // animator.SetTrigger("Open");
+        // Toca som de abertura
+        if (openChestClip != null)
+            _audioSource.PlayOneShot(openChestClip);
 
-        // Desativa o baú (uma run só, sem reinício de cena)
+        // Fecha a UI de lockpick
+        lockpickUI.SetActive(false);
+
+        // Desativa o baú após o som tocar
+        if (openChestClip != null)
+            StartCoroutine(DeactivateAfterSound(openChestClip.length));
+        else
+            gameObject.SetActive(false);
+    }
+
+    private IEnumerator DeactivateAfterSound(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         gameObject.SetActive(false);
     }
 }

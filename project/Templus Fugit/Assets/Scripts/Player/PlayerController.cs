@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [Header("Flame Ball")]
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject flameBallPrefab;
+    public int flameBallDamage = 10;
 
     [Header("Cooldown de Tiro")]
     [Tooltip("Tempo mínimo, em segundos, entre dois disparos de Flame Ball")]
@@ -34,9 +35,9 @@ public class PlayerController : MonoBehaviour
     private float _lastFireTime = 0f;
 
     private Rigidbody2D rb2d;
-    private Animator animator;
-    private bool canMove = true;
-    private Vector2 _lastFacing = Vector2.right;
+    private Animator   animator;
+    private bool       canMove = true;
+    private Vector2    _lastFacing = Vector2.right;
 
     [Header("Animações")]
     public RuntimeAnimatorController andarCima;
@@ -55,11 +56,25 @@ public class PlayerController : MonoBehaviour
     [Header("Moedas")]
     public int coinCount = 0;
 
+    [Header("Áudio de Passos")]
+    [Tooltip("Lista de clipes de passo; escolha aleatoriamente.")]
+    public AudioClip[] footstepClips;
+    [Tooltip("Intervalo em segundos entre cada passo enquanto se move.")]
+    public float footstepInterval = 0.5f;
+
+    private AudioSource _footstepSource;
+    private float       _footstepTimer = 0f;
+
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
         animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+
+        // Cria e configura o AudioSource para passos
+        _footstepSource = gameObject.AddComponent<AudioSource>();
+        _footstepSource.playOnAwake = false;
+        _footstepSource.loop = false;
     }
 
     void Update()
@@ -78,9 +93,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
                 GameManager.Instance.UseInventoryItem(i);
-            }
         }
     }
 
@@ -109,6 +122,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            // Parado: escolhe a pose final
             if (animator.runtimeAnimatorController == andarCima)
                 animator.runtimeAnimatorController = paradoCostas;
             else if (animator.runtimeAnimatorController == andarBaixo)
@@ -121,39 +135,55 @@ public class PlayerController : MonoBehaviour
 
         _velocity = dir.normalized * moveSpeed;
 
-
+        // Guarda direção para projetil
         if (dir != Vector2.zero)
             _lastFacing = dir.normalized;
 
-        // calcula a nova posição
-        Vector2 newPos = rb2d.position + _velocity * Time.fixedDeltaTime;
+        // --- Áudio de Passos ---
+        if (dir != Vector2.zero)
+        {
+            _footstepTimer += Time.deltaTime;
+            if (_footstepTimer >= footstepInterval)
+            {
+                PlayFootstep();
+                _footstepTimer = 0f;
+            }
+        }
+        else
+        {
+            // Parou de andar: reseta timer para evitar passo instantâneo
+            _footstepTimer = footstepInterval;
+        }
 
-        // opcional: mantém dentro dos limites do cenário
+        // Move personagem
+        Vector2 newPos = rb2d.position + _velocity * Time.fixedDeltaTime;
         newPos.x = Mathf.Clamp(newPos.x, boundXEsquerda, boundXDireita);
         newPos.y = Mathf.Clamp(newPos.y, boundYBaixo, boundYCima);
-
         rb2d.MovePosition(newPos);
+    }
+
+    private void PlayFootstep()
+    {
+        if (footstepClips != null && footstepClips.Length > 0)
+        {
+            int idx = UnityEngine.Random.Range(0, footstepClips.Length);
+            _footstepSource.PlayOneShot(footstepClips[idx]);
+        }
     }
 
     private void HandleFire()
     {
-        // não atira se não tiver o poder, nem prefab, nem ponto de disparo…
         if (!GameManager.Instance.CanUseFlame || flameBallPrefab == null || firePoint == null)
             return;
 
-        // respeita o cooldown
-        if (Time.time - _lastFireTime < fireCooldown)
-            return;
+        if (Time.time - _lastFireTime < fireCooldown) return;
 
         if (Input.GetKeyDown(fireKey))
         {
-            // marca o instante do tiro
             _lastFireTime = Time.time;
-
-            // instancia a Flame Ball sem rotação — a própria Launch vai girá-la
             var fb = Instantiate(flameBallPrefab, firePoint.position, Quaternion.identity)
                      .GetComponent<FlameBall>();
-
+            fb.damage = flameBallDamage;
             fb.Launch(_lastFacing);
         }
     }
@@ -165,29 +195,24 @@ public class PlayerController : MonoBehaviour
             Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, interactionRange, interactableLayer);
             foreach (Collider2D interactable in interactables)
             {
-                IInteractable interactableObject = interactable.GetComponent<IInteractable>();
-                if (interactableObject != null)
+                var obj = interactable.GetComponent<IInteractable>();
+                if (obj != null)
                 {
-                    interactableObject.Interact();
+                    obj.Interact();
                     return;
                 }
             }
         }
     }
 
-
-    public void SetCanMove(bool value)
-    {
-        canMove = value;
-    }
+    public void SetCanMove(bool value) => canMove = value;
 
     public void TakeDamage(int amount)
     {
         if (!canBeHit) return;
-
-        canBeHit = false;                            // bloqueia novos hits
-        GameManager.Instance.LoseLife(amount);       // reduz vida e atualiza UI
-        StartCoroutine(HitCooldownCoroutine());      // reinicia permissibilidade depois do cooldown
+        canBeHit = false;
+        GameManager.Instance.LoseLife(amount);
+        StartCoroutine(HitCooldownCoroutine());
     }
 
     private IEnumerator HitCooldownCoroutine()
@@ -202,19 +227,17 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, interactionRange);
     }
 
-    // Dá moedas ao jogador.
     public void AddCoins(int amount = 1)
     {
-        GameManager.Instance.AddCoins(amount); // Atualiza o GameManager
+        GameManager.Instance.AddCoins(amount);
         Debug.Log($"Player adicionou {amount} moedas. Total: {GameManager.Instance.coinCount}");
     }
 
-    // Tenta gastar moedas; retorna true se conseguiu.
     public bool SpendCoins(int amount)
     {
         if (GameManager.Instance.coinCount >= amount)
         {
-            GameManager.Instance.AddCoins(-amount); // Atualiza o GameManager
+            GameManager.Instance.AddCoins(-amount);
             Debug.Log($"Player gastou {amount} moedas. Restam: {GameManager.Instance.coinCount}");
             return true;
         }
@@ -222,15 +245,10 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    // Retorna quantas moedas o player tem.
-    public int GetCoinCount()
-    {
-        return GameManager.Instance.coinCount; // Consulta o GameManager
-    }
+    public int GetCoinCount() => GameManager.Instance.coinCount;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Se o objeto tiver a tag "Coin"
         if (other.CompareTag("Coin"))
         {
             AddCoins(1);

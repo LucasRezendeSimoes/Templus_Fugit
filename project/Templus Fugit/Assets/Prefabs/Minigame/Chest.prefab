@@ -152,6 +152,7 @@ MonoBehaviour:
   lockpickUI: {fileID: 0}
   difficulty: 0
   coinReward: 100
+  openChestClip: {fileID: 8300000, guid: 066c833735610c245b8abfa8d122752c, type: 3}
 --- !u!50 &2955962061354973934
 Rigidbody2D:
   serializedVersion: 4
