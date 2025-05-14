@@ -10689,7 +10689,7 @@ MonoBehaviour:
   IdleController: {fileID: 9100000, guid: fb7c18385ea5d91469f79702a8044b3a, type: 2}
   RunController: {fileID: 9100000, guid: 89abbda68d8fc2243bfdb272f3d5cce5, type: 2}
   TakeHitController: {fileID: 9100000, guid: efdb3c6baececb14d982f3f293b9c5c8, type: 2}
-  vida: 1500
+  vida: 1000
   attackRange: 2
   DamageFlashTime: 0.2
   detectionRange: 10

@@ -7944,6 +7944,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+--- !u!1 &935033368 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6461132374221272284, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+  m_PrefabInstance: {fileID: 935033367}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1062003393
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8000,6 +8005,10 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 1173312576}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: dialogueBox
+      value: 
+      objectReference: {fileID: 935033368}
     - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
       propertyPath: 'lines.Array.data[0]'
       value: "No alto de uma torre, quatro rel\xF3gios gigantes giram sem ponteiros."

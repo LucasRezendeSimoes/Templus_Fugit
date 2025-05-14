@@ -524,8 +524,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -347, y: 100}
-  m_SizeDelta: {x: 500, y: 50}
+  m_AnchoredPosition: {x: -347, y: 163}
+  m_SizeDelta: {x: 522.55, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &398235938
 MonoBehaviour:
@@ -549,8 +549,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Destrua Cronos para vencer\nColete todos os fragmentos de mem\xF3ria (eles
     podem te dar dicas importantes)  \nO jogador perde vida ao encostar nos inimigos\nMovimenta\xE7\xE3o
-    do jogador (W, A, S, D)\nDisparar Bolas de Fogo (Space)\nBot\xE3o para Interagir:
-    E "
+    do jogador (W, A, S, D)\nBot\xF5es para utiliza\xE7\xE3o do invent\xE1rio (1,
+    2, 3, 4, 5)\nDisparar Bolas de Fogo (Space)\nBot\xE3o para Interagir: E "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5d7265cb3eb1a2f4f936170031d905a7, type: 2}
   m_sharedMaterial: {fileID: 3321319116616167326, guid: 5d7265cb3eb1a2f4f936170031d905a7, type: 2}
