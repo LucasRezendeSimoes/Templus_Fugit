@@ -8162,6 +8162,7 @@ GameObject:
   - component: {fileID: 1173312576}
   - component: {fileID: 1173312575}
   - component: {fileID: 1173312578}
+  - component: {fileID: 1173312579}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -8259,6 +8260,18 @@ MonoBehaviour:
   smoothSpeed: 1
   minCameraBounds: {x: 0, y: -0.53, z: 0}
   maxCameraBounds: {x: 0, y: -0.53, z: 0}
+--- !u!114 &1173312579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173312574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d478ebfb8a33ac440b08e99b140ea1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1371052215
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8477,6 +8490,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
   m_PrefabInstance: {fileID: 1668887434}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1668887436 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6461132374221272284, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+  m_PrefabInstance: {fileID: 1668887434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1861252138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8543,6 +8561,83 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1984979846246933369, guid: 0fc76b4767b431442baf4af59686393c, type: 3}
   m_PrefabInstance: {fileID: 1861252138}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2145956331
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.2817307
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.2815385
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051896599117041260, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094747614359507480, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: m_Name
+      value: FragmentoMemoria
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 1173312576}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: dialogueBox
+      value: 
+      objectReference: {fileID: 1668887436}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: 'lines.Array.data[0]'
+      value: "Um sussurro rasgou o sil\xEAncio: \u2018Eu sou o fim e o in\xEDcio."
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: 'lines.Array.data[1]'
+      value: "As palavras pairaram como l\xE2minas de ar,"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: 'lines.Array.data[2]'
+      value: "revelando que Cronos se alimenta de cada segundo que voc\xEA respira."
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 94fae3a794484554ca09a3038be10634, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -8554,5 +8649,6 @@ SceneRoots:
   - {fileID: 536094888}
   - {fileID: 862510864}
   - {fileID: 708202980}
+  - {fileID: 2145956331}
   - {fileID: 1668887434}
   - {fileID: 248366111}

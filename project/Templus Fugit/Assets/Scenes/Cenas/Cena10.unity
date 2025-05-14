@@ -8644,6 +8644,7 @@ GameObject:
   - component: {fileID: 1179966122}
   - component: {fileID: 1179966121}
   - component: {fileID: 1179966120}
+  - component: {fileID: 1179966124}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -8741,6 +8742,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1179966124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179966119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d478ebfb8a33ac440b08e99b140ea1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1262087022
 GameObject:
   m_ObjectHideFlags: 0
@@ -9283,6 +9296,20 @@ PrefabInstance:
       propertyPath: dialogueBox
       value: 
       objectReference: {fileID: 1720196306}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: 'lines.Array.data[0]'
+      value: "No cora\xE7\xE3o do templo h\xE1 um ser de asas quebradas, coroado
+        de engrenagens."
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: 'lines.Array.data[1]'
+      value: Ele mistura tempo e carne, guardando com fervor o portal adiante.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: 'lines.Array.data[2]'
+      value: "Dizem que derrot\xE1-lo \xE9 recusar o pr\xF3prio futuro \u2014 ou
+        aceit\xE1-lo de uma vez por todas."
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
