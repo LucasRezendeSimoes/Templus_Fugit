@@ -12,6 +12,10 @@ public class BossController : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb2d;
 
+    [Header("Movement")]
+    [Tooltip("Speed at which the Boss moves")]
+    public float speed = 3.5f;
+
     [Header("Animadores")]
     public RuntimeAnimatorController AttackController;
     public RuntimeAnimatorController DeathController;
@@ -38,6 +42,7 @@ public class BossController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+        agent.speed = speed; // Aplica a velocidade configurada
 
         animator = GetComponent<Animator>();
         rb2d = GetComponent<Rigidbody2D>();

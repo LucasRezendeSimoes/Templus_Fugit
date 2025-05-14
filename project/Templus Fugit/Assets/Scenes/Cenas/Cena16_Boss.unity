@@ -10684,6 +10684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 679315467}
+  speed: 2.5
   AttackController: {fileID: 9100000, guid: 94828c757fc70584790a064c7ad208ef, type: 2}
   DeathController: {fileID: 9100000, guid: e713f1fff3936604dbee6fb6f49d02d8, type: 2}
   IdleController: {fileID: 9100000, guid: fb7c18385ea5d91469f79702a8044b3a, type: 2}
