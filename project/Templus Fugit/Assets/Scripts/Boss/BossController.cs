@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
+
 
 public class BossController : MonoBehaviour
 {
@@ -189,6 +191,9 @@ public class BossController : MonoBehaviour
         animator.runtimeAnimatorController = DeathController;  // Usando o controller de morte
         agent.isStopped = true;
         Destroy(gameObject, 0.5f); // Destroi o inimigo após a animação de morte
+        // muda para cena YouWin
+        SceneManager.LoadScene("YouWin");
+
     }
 
     private void ToggleHitBox(bool state)

@@ -51,6 +51,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Cenas/Cena16_Boss.unity
     guid: 94ccbae9a5e97ef4b97fe87f33ebccb9
   - enabled: 1
+    path: Assets/Scenes/Menus/Instructions.unity
+    guid: 18ab7d9a452a427419d56e240b65bc8b
+  - enabled: 0
     path: Assets/Scenes/Cenas/CenaSemNum.unity
     guid: 6233624a998893d4ba70545eb6aba858
   - enabled: 1

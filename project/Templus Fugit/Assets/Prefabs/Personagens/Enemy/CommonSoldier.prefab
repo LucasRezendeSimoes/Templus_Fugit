@@ -278,11 +278,12 @@ MonoBehaviour:
   vida: 300
   detectionRange: 8
   attackRange: 1.2
-  attackCooldown: 1
+  attackCooldown: 2
   hitCooldown: 0
   damageFlashTime: 0.2
   healthBarPrefab: {fileID: 0}
   healthBarOffset: {x: 0, y: 1, z: 0}
+  swordHitClip: {fileID: 8300000, guid: ef0818746488f244dbcc52a6343055be, type: 3}
   coinPrefab: {fileID: 6145425744558172525, guid: 9a80cff8f68934d458b3f3833921fd13, type: 3}
   twoCoinsChance: 0.05
   oneCoinChance: 0.2

@@ -47,6 +47,11 @@ public class Enemy : MonoBehaviour
     public Vector3   healthBarOffset = new Vector3(0, 1, 0);
     private HealthBar healthBarInstance;
 
+    [Header("Áudio de Impacto")]
+    [Tooltip("Som de impacto de espada ao acertar o player")]
+    public AudioClip swordHitClip;
+    private AudioSource _audioSource;
+
     [Header("Configuração de Loot (moedas)")]
     public GameObject coinPrefab;
     [Range(0f,1f), Tooltip("Chance de cair 2 moedas")]
@@ -79,6 +84,10 @@ public class Enemy : MonoBehaviour
             healthBarInstance.Initialize(transform, healthBarOffset);
             healthBarInstance.SetHealthPercent(1f);
         }
+
+        // Configura AudioSource para som de impacto
+        _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource.playOnAwake = false;
     }
 
     void Update()
@@ -176,15 +185,22 @@ public class Enemy : MonoBehaviour
     IEnumerator DoAttack()
     {
         canAttack = false;
+
         PlayAnimation(State.Attack);
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+
         var hb = transform.Find("EnemyHitBox")?.gameObject;
         if (hb != null)
         {
             hb.SetActive(true);
+            // Toca som de impacto ao ativar o hitbox
+            if (swordHitClip != null)
+                _audioSource.PlayOneShot(swordHitClip);
+
             yield return new WaitForSeconds(0.1f);
             hb.SetActive(false);
         }
+
         PlayAnimation(State.Idle);
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
@@ -195,6 +211,7 @@ public class Enemy : MonoBehaviour
         if (!canBeHit) return;
         currentHealth -= dmg;
         canBeHit = false;
+
         if (currentHealth <= 0)
         {
             PlayAnimation(State.Death);
@@ -234,6 +251,7 @@ public class Enemy : MonoBehaviour
             dropCount = 2;
         else if (roll < twoCoinsChance + oneCoinChance)
             dropCount = 1;
+
         for (int i = 0; i < dropCount; i++)
         {
             Vector2 offset = Random.insideUnitCircle * 0.5f;

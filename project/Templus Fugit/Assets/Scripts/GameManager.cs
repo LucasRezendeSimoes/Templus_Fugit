@@ -141,6 +141,9 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+         // --- aplica volume salvo antes de tocar qualquer coisa ---
+        float savedVol = PlayerPrefs.GetFloat("musicVolume", 1f);
+        AudioListener.volume = savedVol;
         // Singleton padrão
         if (Instance == null)
         {
