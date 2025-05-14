@@ -8777,11 +8777,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 203795861}
-  lines:
-  - "Voc\xEA..."
-  - "voc\xEA tamb\xE9m est\xE1 presa no ciclo? N\xE3o se preocupe, eu vendo coisas
-    que podem... adiar o inevit\xE1vel. Por enquanto."
   textSpeed: 0.05
+  autoNextDelay: 2
+  closeKey: 102
 --- !u!114 &660144973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10623,7 +10621,7 @@ Transform:
   m_GameObject: {fileID: 1226330351}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.38, z: 0}
+  m_LocalPosition: {x: 0, y: -0.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11258,7 +11256,7 @@ MonoBehaviour:
   IdleController: {fileID: 9100000, guid: fb7c18385ea5d91469f79702a8044b3a, type: 2}
   RunController: {fileID: 9100000, guid: 89abbda68d8fc2243bfdb272f3d5cce5, type: 2}
   TakeHitController: {fileID: 9100000, guid: efdb3c6baececb14d982f3f293b9c5c8, type: 2}
-  vida: 100
+  vida: 1500
   attackRange: 1.7
   DamageFlashTime: 0.2
   detectionRange: 10
@@ -12090,12 +12088,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 1472043082}
-  lines:
-  - "Voc\xEA n\xE3o deveria estar aqui de novo..."
-  - "A cada ciclo, voc\xEA esquece um pouco mais... mas os ecos do templo ainda te
-    reconhecem."
-  - "Encontre os fragmentos. Junte as pe\xE7as. S\xF3 assim... poder\xE1 escapar."
   textSpeed: 0.05
+  autoNextDelay: 2
+  closeKey: 102
 --- !u!114 &2045233300
 MonoBehaviour:
   m_ObjectHideFlags: 0

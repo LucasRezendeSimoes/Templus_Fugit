@@ -4783,6 +4783,108 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &231859351 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6461132374221272284, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+  m_PrefabInstance: {fileID: 301658473}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &301658473
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6520013379038720335, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+      propertyPath: m_Name
+      value: Canvas
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
 --- !u!1 &387711308
 GameObject:
   m_ObjectHideFlags: 0
@@ -8717,6 +8819,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1555096402852711252, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555096402852711252, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: m_fontSize
       value: 36
       objectReference: {fileID: 0}
@@ -8728,6 +8834,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Puzzle
       objectReference: {fileID: 0}
+    - target: {fileID: 5728495640216990608, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: dialogueBox
+      value: 
+      objectReference: {fileID: 231859351}
     - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: gameManager
       value: 
@@ -8740,6 +8858,36 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 2073707056}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: dialogueLines.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: 'dialogueLines.Array.data[0]'
+      value: "Este sal\xE3o guarda um antigo mecanismo temporal gravado no ch\xE3o."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: 'dialogueLines.Array.data[1]'
+      value: "Voc\xEA ver\xE1 uma sequ\xEAncia de letras projetada sob seus p\xE9s."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: 'dialogueLines.Array.data[2]'
+      value: Pressione cada tecla na ordem correta para ativar o altar antigo.
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: 'dialogueLines.Array.data[3]'
+      value: "A cada erro, voc\xEA perder\xE1 segundos preciosos \u2014 cuidado com
+        o Tempo!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: 'dialogueLines.Array.data[4]'
+      value: "Quando completar toda a sequ\xEAncia, as portas se abrir\xE3o para
+        continuar sua jornada."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: 'dialogueLines.Array.data[5]'
+      value: "Prepare-se\u2026 e confirme cada letra com precis\xE3o antes de avan\xE7ar."
+      objectReference: {fileID: 0}
     - target: {fileID: 7194593850667391532, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.75
@@ -8802,4 +8950,5 @@ SceneRoots:
   - {fileID: 893019593}
   - {fileID: 5527048689849030046}
   - {fileID: 1211558222}
+  - {fileID: 301658473}
   - {fileID: 44183026}

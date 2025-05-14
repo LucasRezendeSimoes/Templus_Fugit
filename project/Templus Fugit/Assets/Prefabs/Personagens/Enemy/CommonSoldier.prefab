@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  moveSpeed: 1
   IdleLeftController: {fileID: 9100000, guid: 5482437c18a6a5c41a48dc425ca90139, type: 2}
   IdleRightController: {fileID: 9100000, guid: fc63574851f0a154f94498b35fec6e6e, type: 2}
   IdleTopController: {fileID: 9100000, guid: 7b9d8f51a0b574443b644404c888d13a, type: 2}
@@ -274,7 +275,7 @@ MonoBehaviour:
   DeathRightController: {fileID: 9100000, guid: b81b9ac0c842d9f46aee07081eff985d, type: 2}
   DeathTopController: {fileID: 9100000, guid: 8eef2126f9989824692b922e80128482, type: 2}
   DeathBotController: {fileID: 9100000, guid: f2a4ece107fb8d44d9935207c2be5f2f, type: 2}
-  vida: 100
+  vida: 300
   detectionRange: 8
   attackRange: 1.2
   attackCooldown: 1
@@ -282,6 +283,9 @@ MonoBehaviour:
   damageFlashTime: 0.2
   healthBarPrefab: {fileID: 0}
   healthBarOffset: {x: 0, y: 1, z: 0}
+  coinPrefab: {fileID: 6145425744558172525, guid: 9a80cff8f68934d458b3f3833921fd13, type: 3}
+  twoCoinsChance: 0.05
+  oneCoinChance: 0.2
 --- !u!195 &2233879466976575396
 NavMeshAgent:
   m_ObjectHideFlags: 0

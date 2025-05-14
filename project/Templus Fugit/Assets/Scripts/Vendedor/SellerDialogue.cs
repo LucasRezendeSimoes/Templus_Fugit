@@ -1,83 +1,66 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class SellerDialogue : MonoBehaviour, IInteractable
 {
-    public GameObject dialogueBox; // Referência ao objeto do diálogo
-    private bool isDialogueActive = false; // Verifica se o diálogo está ativo
-    private bool isPlayerNearby = false; // Verifica se o jogador está próximo
-    private Rigidbody2D rb2d; // Define o corpo rígido 2D que representa o player
+    [Tooltip("Caixa de diálogo (deve conter o componente DialogueBox)")]
+    public GameObject dialogueBox;
 
-    // Start é chamado antes do primeiro frame update
+    [Header("Linhas de diálogo do vendedor")]
+    [TextArea(3,8)]
+    public string[] lines;
+
+    [Tooltip("Velocidade de digitação, em segundos por caractere")]
+    public float textSpeed = 0.05f;
+
+    private DialogueBox dlg;
+    private bool        isDialogueActive = false;
+
     void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>(); // Inicializa o player
-        if (dialogueBox != null)
+        if (dialogueBox == null)
         {
-            dialogueBox.SetActive(false); // Garante que a caixa de diálogo esteja desativada no início
+            Debug.LogError("SellerDialogue: atribua a DialogueBox no Inspector.");
+            return;
         }
+
+        dialogueBox.SetActive(false);
+        dlg = dialogueBox.GetComponent<DialogueBox>();
+        if (dlg == null)
+        {
+            Debug.LogError("SellerDialogue: DialogueBox não encontrado no objeto dialogueBox.");
+            return;
+        }
+
+        // Callback opcional ao terminar todas as linhas
+        dlg.onComplete = OnDialogueComplete;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E) && isPlayerNearby)
-        {
-            Interact();
-        }
-    }
-
+    // Chamado pelo PlayerController.HandleInteraction() quando o player aperta E
     public void Interact()
     {
         if (!isDialogueActive)
-        {
             ShowDialogue();
-        }
-        else
-        {
+        else if (dlg.IsComplete)
             CloseDialogue();
-        }
     }
 
     private void ShowDialogue()
     {
-        if (dialogueBox != null)
-        {
-            dialogueBox.SetActive(true); // Ativa a caixa de diálogo
-        }
+        dialogueBox.SetActive(true);
         isDialogueActive = true;
-
-        // Certifique-se de que o texto do TMP não seja alterado
-        var textComponent = dialogueBox.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-        if (textComponent != null)
-        {
-            textComponent.enabled = true; // Garante que o texto seja exibido
-        }
+        dlg.StartDialog(lines, textSpeed);
     }
 
     private void CloseDialogue()
     {
-        if (dialogueBox != null)
-        {
-            dialogueBox.SetActive(false); // Desativa a caixa de diálogo
-        }
+        dialogueBox.SetActive(false);
         isDialogueActive = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnDialogueComplete()
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            isPlayerNearby = true; // Detecta que o jogador está próximo
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            isPlayerNearby = false; // Detecta que o jogador saiu da área
-        }
+        // Aqui você pode, se quiser, mostrar um prompt ("Pressione F para fechar")  
+        // ou ativar botões de compra antes de permitir fechar.
     }
 }

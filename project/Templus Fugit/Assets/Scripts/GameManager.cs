@@ -136,6 +136,9 @@ public class GameManager : MonoBehaviour
 
     public HashSet<string> openedChests = new HashSet<string>();
 
+    public HashSet<string> collectedSpawnIDs = new HashSet<string>();
+
+
     void Awake()
     {
         // Singleton padrão
@@ -559,6 +562,7 @@ public class GameManager : MonoBehaviour
     public void ResetRunData()
     {
         openedChests.Clear(); // Limpa os baús abertos
+        collectedSpawnIDs.Clear(); // Limpa os IDs dos spawns coletados
     }
 
     public void AddCoins(int amount)
@@ -697,6 +701,12 @@ public class GameManager : MonoBehaviour
         if (_cronosSlotImages == null) return;
         if (slotIdx < 0 || slotIdx >= _cronosSlotImages.Length) return;
         _cronosSlotImages[slotIdx].sprite = GetItemIcon(item);
+    }
+
+    public void RegisterCollectedSpawn(string spawnID)
+    {
+        if (!collectedSpawnIDs.Contains(spawnID))
+            collectedSpawnIDs.Add(spawnID);
     }
 
     // Usa (consome) o item naquele slot e aplica o efeito.

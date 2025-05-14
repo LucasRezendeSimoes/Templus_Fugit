@@ -15,6 +15,10 @@ public class Enemy : MonoBehaviour
     private Animator     animator;
     private Rigidbody2D  rb2d;
 
+    [Header("Parâmetros de Movimento")]
+    [Tooltip("Velocidade de patrulha e perseguição do inimigo")]
+    public float moveSpeed = 3f;
+
     [Header("Animadores por Estado e Direção")]
     public RuntimeAnimatorController IdleLeftController,  IdleRightController,  IdleTopController,  IdleBotController;
     public RuntimeAnimatorController WalkLeftController,  WalkRightController,  WalkTopController,  WalkBotController;
@@ -41,9 +45,14 @@ public class Enemy : MonoBehaviour
     public HealthBar healthBarPrefab;
     [Tooltip("Offset da barra acima do inimigo")]
     public Vector3   healthBarOffset = new Vector3(0, 1, 0);
-
-    // INSTÂNCIA criada em cena
     private HealthBar healthBarInstance;
+
+    [Header("Configuração de Loot (moedas)")]
+    public GameObject coinPrefab;
+    [Range(0f,1f), Tooltip("Chance de cair 2 moedas")]
+    public float twoCoinsChance = 0.05f;
+    [Range(0f,1f), Tooltip("Chance de cair 1 moeda (além da de 2)")]
+    public float oneCoinChance = 0.20f;
 
     void Start()
     {
@@ -52,21 +61,21 @@ public class Enemy : MonoBehaviour
         agent    = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         rb2d     = GetComponent<Rigidbody2D>();
+
+        // aplica a velocidade configurável
+        agent.speed         = moveSpeed;
         agent.updateRotation = false;
         agent.updateUpAxis   = false;
 
-        // 1) Instancia a barra de vida na cena
+        // Instancia a barra de vida
         if (healthBarPrefab != null)
         {
             healthBarInstance = Instantiate(
                 healthBarPrefab,
                 transform.position + healthBarOffset,
                 Quaternion.identity,
-                // opcional: se tiver um GameObject pai para as barras
                 GameObject.Find("HealthBars")?.transform
             );
-
-            // 2) inicializa e seta como cheia
             healthBarInstance.Initialize(transform, healthBarOffset);
             healthBarInstance.SetHealthPercent(1f);
         }
@@ -74,11 +83,9 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        // 3) Atualiza a instância, não o prefab
         if (healthBarInstance != null)
             healthBarInstance.SetHealthPercent(currentHealth / (float)vida);
 
-        // lógica de stun/invisibilidade
         if (GameManager.Instance.IsTimeStopped || GameManager.Instance.IsInvisible)
         {
             PlayAnimation(State.Idle);
@@ -86,7 +93,6 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // se morreu
         if (currentHealth <= 0)
         {
             Die();
@@ -170,11 +176,8 @@ public class Enemy : MonoBehaviour
     IEnumerator DoAttack()
     {
         canAttack = false;
-
         PlayAnimation(State.Attack);
-        var clipLen = animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(clipLen);
-
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
         var hb = transform.Find("EnemyHitBox")?.gameObject;
         if (hb != null)
         {
@@ -182,7 +185,6 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             hb.SetActive(false);
         }
-
         PlayAnimation(State.Idle);
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
@@ -191,10 +193,8 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         if (!canBeHit) return;
-
         currentHealth -= dmg;
         canBeHit = false;
-
         if (currentHealth <= 0)
         {
             PlayAnimation(State.Death);
@@ -225,8 +225,26 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void TryDropCoins()
+    {
+        if (coinPrefab == null) return;
+        float roll = Random.value;
+        int dropCount = 0;
+        if (roll < twoCoinsChance)
+            dropCount = 2;
+        else if (roll < twoCoinsChance + oneCoinChance)
+            dropCount = 1;
+        for (int i = 0; i < dropCount; i++)
+        {
+            Vector2 offset = Random.insideUnitCircle * 0.5f;
+            Vector3 spawnPos = transform.position + (Vector3)offset;
+            Instantiate(coinPrefab, spawnPos, Quaternion.identity);
+        }
+    }
+
     void Die()
     {
+        TryDropCoins();
         agent.isStopped = true;
         Destroy(gameObject, 0.4f);
     }

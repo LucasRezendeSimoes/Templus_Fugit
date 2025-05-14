@@ -3,7 +3,24 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Tipos de recompensa possíveis em um baú.
+/// </summary>
+public enum ChestReward
+{
+    Coins,
+    BamiEmber,
+    HealthPotion,
+    CloakNyx,
+    Hourglass,
+    BrokenWatch
+}
 
+/// <summary>
+/// Dispara um minigame de lockpick e distribui recompensas ao destravar.
+/// Para Cena2 mantém comportamento fixo; para outras cenas, sorteio aleatório.
+/// Destrói portas (tag "Door") quando todos inimigos (tag "Enemy") são eliminados.
+/// </summary>
 public class ChestLockpickTrigger : MonoBehaviour, IInteractable
 {
     [Header("Identificador único do baú (para persistência)")]
@@ -14,7 +31,11 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
     public LockpickDifficulty difficulty = LockpickDifficulty.Medium;
     private LockpickMinigame minigame;
 
-    [Header("Recompensa em Moedas")]
+    [Header("Recompensas Aleatórias (exceto Cena2)")]
+    [Tooltip("Lista de recompensas possíveis neste baú")] 
+    public ChestReward[] possibleRewards;
+
+    [Header("Recompensa Fixa de Moedas")]
     public int coinReward = 5;
 
     [Header("Recompensa em Brasa de Bami (Flame Ball)")]
@@ -27,27 +48,31 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
     private AudioSource _audioSource;
 
     private bool opened = false;
+    private bool doorsUnlocked = false;
 
     void Start()
     {
-        // Pega a referência ao minigame
         if (lockpickUI != null)
             minigame = lockpickUI.GetComponent<LockpickMinigame>();
 
-        // Configura AudioSource para o baú
         _audioSource = gameObject.AddComponent<AudioSource>();
         _audioSource.playOnAwake = false;
 
-        // Se já estiver aberto nesta run, desative o baú
-        if (!string.IsNullOrEmpty(chestID) &&
-            GameManager.Instance.openedChests.Contains(chestID))
-        {
+        if (!string.IsNullOrEmpty(chestID) && GameManager.Instance.openedChests.Contains(chestID))
             opened = true;
-            // gameObject.SetActive(false);
+    }
+
+    void Update()
+    {
+        // Quando não há mais inimigos, destrói todas as portas
+        if (!doorsUnlocked && GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
+        {
+            foreach (var door in GameObject.FindGameObjectsWithTag("Door"))
+                Destroy(door);
+            doorsUnlocked = true;
         }
     }
 
-    // Chamado pelo PlayerController
     public void Interact()
     {
         TryOpen();
@@ -55,68 +80,93 @@ public class ChestLockpickTrigger : MonoBehaviour, IInteractable
 
     private void TryOpen()
     {
-        if (opened || minigame == null) 
+        if (opened || minigame == null)
             return;
 
-        // Abre a UI e inicia o minigame, passando a dificuldade e o callback
+        // Impede abertura enquanto inimigos existirem
+        if (GameObject.FindGameObjectsWithTag("Enemy").Length > 0)
+        {
+            Debug.Log("Derrote todos os inimigos antes de abrir o baú.");
+            return;
+        }
+
+        // Inicia minigame de lockpick
         lockpickUI.SetActive(true);
         minigame.StartMinigame(difficulty, UnlockChest);
     }
 
-    // Callback executado quando o minigame devolve sucesso
     private void UnlockChest()
     {
         if (opened) return;
         opened = true;
 
-        // Marca como aberto no GameManager
+        // Salva id de baú aberto para persistência
         if (!string.IsNullOrEmpty(chestID))
             GameManager.Instance.openedChests.Add(chestID);
 
-        // Detecta cena atual
         string sceneName = SceneManager.GetActiveScene().name;
+        var player = GameObject.FindGameObjectWithTag("Player");
+        var pc     = player != null ? player.GetComponent<PlayerController>() : null;
 
-        if (sceneName == "Cena2" && FlameBallPrefab != null)
+        // Cena2: mantém comportamento fixo
+        if (sceneName == "Cena2")
         {
-            // 1) Concede o poder de Flame Ball
-            GameManager.Instance.GrantFlamePower(FlameBallPrefab);
-
-            // 2) Adiciona também a Brasa de Bami ao inventário
-            bool added = GameManager.Instance.AddInventoryItem(ItemType.BamiEmber);
-            if (!added)
-                Debug.LogWarning("Inventário cheio: não foi possível adicionar a Brasa de Bami.");
-
-            // Opcional: atualizar o ícone de poder ou de slot extra
+            if (FlameBallPrefab != null)
+            {
+                GameManager.Instance.GrantFlamePower(FlameBallPrefab);
+                bool added = GameManager.Instance.AddInventoryItem(ItemType.BamiEmber);
+                if (!added)
+                    Debug.LogWarning("Inventário cheio: não foi possível adicionar a Brasa de Bami.");
+            }
         }
         else
         {
-            // Lógica padrão: dá moedas
-            var player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
+            // Sorteia recompensa entre as opções
+            ChestReward reward = ChestReward.Coins;
+            if (possibleRewards != null && possibleRewards.Length > 0)
+                reward = possibleRewards[Random.Range(0, possibleRewards.Length)];
+
+            switch (reward)
             {
-                var pc = player.GetComponent<PlayerController>();
-                if (pc != null)
-                    pc.AddCoins(coinReward);
+                case ChestReward.Coins:
+                    if (pc != null)
+                        pc.AddCoins(coinReward);
+                    break;
+                case ChestReward.BamiEmber:
+                    if (FlameBallPrefab != null)
+                    {
+                        GameManager.Instance.GrantFlamePower(FlameBallPrefab);
+                        GameManager.Instance.AddInventoryItem(ItemType.BamiEmber);
+                    }
+                    break;
+                case ChestReward.HealthPotion:
+                    GameManager.Instance.AddInventoryItem(ItemType.HealthPotion);
+                    break;
+                case ChestReward.CloakNyx:
+                    GameManager.Instance.AddInventoryItem(ItemType.CloakNyx);
+                    break;
+                case ChestReward.Hourglass:
+                    GameManager.Instance.AddInventoryItem(ItemType.Hourglass);
+                    break;
+                case ChestReward.BrokenWatch:
+                    GameManager.Instance.AddInventoryItem(ItemType.BrokenWatch);
+                    break;
             }
         }
 
-        // Toca som de abertura
+        // Toca som e fecha UI
         if (openChestClip != null)
             _audioSource.PlayOneShot(openChestClip);
-
-        // Fecha a UI de lockpick
         lockpickUI.SetActive(false);
 
-        // Desativa o baú após o som tocar
         if (openChestClip != null)
             StartCoroutine(DeactivateAfterSound(openChestClip.length));
     }
 
-
-
     private IEnumerator DeactivateAfterSound(float delay)
     {
         yield return new WaitForSeconds(delay);
+        // opcional: desativar o baú
         // gameObject.SetActive(false);
     }
 }

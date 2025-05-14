@@ -1,54 +1,120 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
-using System.Linq; // Para usar métodos como OrderBy
 
+/// <summary>
+/// Gerencia o puzzle de sequência de teclas, com diálogo introdutório apenas em Cena5.
+/// </summary>
 public class PuzzleSequenceManager : MonoBehaviour
 {
-    public List<KeyCode> sequence;                // Sequência correta de teclas
+    [Header("Introdução ao Puzzle (Cena5)")]
+    [Tooltip("Caixa de diálogo que contém o DialogueBox")]
+    public GameObject dialogueBox;
+    [Tooltip("Linhas explicando como funciona o puzzle")]
+    [TextArea(3, 6)]
+    public string[] dialogueLines;
+    [Tooltip("Velocidade de digitação do diálogo (s por caractere)")]
+    public float textSpeed = 0.05f;
+
+    private DialogueBox dlg;
+    private bool puzzleStarted = false;
+
+    [Header("Sequência do Puzzle")]
+    public List<KeyCode> sequence;
     private int currentIndex = 0;
+    public TextMeshPro sequenceDisplay3D;
+    public float penaltyTime = 5f;
 
-    public TextMeshPro sequenceDisplay3D;         // Texto 3D no chão
-    public float penaltyTime = 5f;                // Tempo perdido ao errar
+    [Header("Referências e Dificuldade")]
+    public PlayerController playerController;
+    public Camera mainCamera;
+    [Tooltip("Multiplicador de intensidade do tremor de câmera")]
+    public float shakeIntensityFactor = 0.025f;
+    [Tooltip("Fator para duração do tremor")]
+    public float shakeDurationFactor = 0.5f;
+    public int difficultyLevel = 1;
 
-    public GameManager gameManager;               // Referência ao sistema de tempo
+    private Coroutine cameraShakeCoroutine;
     private bool puzzleCompleted = false;
-
-    public PlayerController playerController;     // Referência ao script de movimento do jogador
-
-    public int difficultyLevel = 1;               // Nível de dificuldade (1 = fácil, aumenta com o tempo)
-
-    public Camera mainCamera; // Referência à câmera principal
-    private Coroutine cameraShakeCoroutine; // Referência para o tremor da câmera
 
     void Start()
     {
-        // Inicia o tremor da câmera
-        if (mainCamera != null)
+        // Se estamos na Cena5, mostramos o diálogo antes de começar o puzzle
+        if (SceneManager.GetActiveScene().name == "Cena5")
         {
-            CameraShake cameraShake = mainCamera.GetComponent<CameraShake>();
-            if (cameraShake != null)
+            if (dialogueBox == null)
             {
-                float shakeIntensity = 0.025f * difficultyLevel; // Intensidade aumenta com a dificuldade
-                float shakeDuration = 0.5f / difficultyLevel;  // Duração diminui com a dificuldade
-                cameraShakeCoroutine = StartCoroutine(cameraShake.ShakeContinuous(shakeIntensity, shakeDuration)); // Tremor contínuo
+                Debug.LogError("PuzzleSequenceManager: dialogueBox não atribuído.");
+                BeginPuzzle();
+            }
+            else
+            {
+                dialogueBox.SetActive(false);
+                dlg = dialogueBox.GetComponent<DialogueBox>();
+                if (dlg == null)
+                {
+                    Debug.LogError("PuzzleSequenceManager: DialogueBox não encontrado em dialogueBox.");
+                    BeginPuzzle();
+                }
+                else
+                {
+                    dlg.onComplete = OnDialogueComplete;
+                    ShowDialogue();
+                }
             }
         }
-        GenerateRandomSequence(5 * difficultyLevel); // Gera uma sequência baseada na dificuldade
+        else
+        {
+            BeginPuzzle();
+        }
+    }
+
+    private void ShowDialogue()
+    {
+        // trava movimento do jogador durante o diálogo
+        playerController?.SetCanMove(false);
+
+        dialogueBox.SetActive(true);
+        dlg.StartDialog(dialogueLines, textSpeed);
+    }
+
+    private void OnDialogueComplete()
+    {
+        dialogueBox.SetActive(false);
+        BeginPuzzle();
+    }
+
+    private void BeginPuzzle()
+    {
+        puzzleStarted = true;
+        currentIndex = 0;
+
+        // inicia tremor de câmera contínuo
+        if (mainCamera != null)
+        {
+            var cs = mainCamera.GetComponent<CameraShake>();
+            if (cs != null)
+            {
+                float intensity = shakeIntensityFactor * difficultyLevel;
+                float duration  = shakeDurationFactor / difficultyLevel;
+                cameraShakeCoroutine = StartCoroutine(cs.ShakeContinuous(intensity, duration));
+            }
+        }
+
+        // gera e exibe sequência
+        GenerateRandomSequence(5 * difficultyLevel);
         UpdateSequenceText();
 
-        // Travar o movimento do jogador ao iniciar o puzzle
-        if (playerController != null)
-        {
-            playerController.SetCanMove(false); // Impede o movimento
-        }
+        // trava movimento até resolver o puzzle
+        playerController?.SetCanMove(false);
     }
 
     void Update()
     {
-        if (puzzleCompleted) return;
-
+        if (!puzzleStarted || puzzleCompleted) return;
         HandleInput();
     }
 
@@ -60,16 +126,12 @@ public class PuzzleSequenceManager : MonoBehaviour
             {
                 StartCoroutine(FlashText(Color.green));
                 currentIndex++;
-
                 if (currentIndex >= sequence.Count)
-                {
                     PuzzleSolved();
-                }
             }
             else
             {
-                // Penalidade
-                GameManager.Instance.ReduceTime(penaltyTime); // Chama o método diretamente no GameManager
+                GameManager.Instance.ReduceTime(penaltyTime);
                 StartCoroutine(FlashText(Color.red));
                 currentIndex = 0;
             }
@@ -78,26 +140,18 @@ public class PuzzleSequenceManager : MonoBehaviour
 
     void UpdateSequenceText()
     {
-        string display = "";
-        foreach (KeyCode key in sequence)
-        {
-            display += key.ToString() + " ";
-        }
-
         if (sequenceDisplay3D != null)
-        {
-            sequenceDisplay3D.text = display;
-        }
+            sequenceDisplay3D.text = string.Join(" ", sequence.Select(k => k.ToString()));
     }
 
     IEnumerator FlashText(Color flashColor)
     {
         if (sequenceDisplay3D != null)
         {
-            Color originalColor = sequenceDisplay3D.color;
+            var orig = sequenceDisplay3D.color;
             sequenceDisplay3D.color = flashColor;
             yield return new WaitForSeconds(0.2f);
-            sequenceDisplay3D.color = originalColor;
+            sequenceDisplay3D.color = orig;
         }
     }
 
@@ -105,37 +159,30 @@ public class PuzzleSequenceManager : MonoBehaviour
     {
         puzzleCompleted = true;
 
-        // Para o tremor da câmera
+        // para tremor de câmera
         if (cameraShakeCoroutine != null && mainCamera != null)
         {
-            CameraShake cameraShake = mainCamera.GetComponent<CameraShake>();
-            if (cameraShake != null)
+            var cs = mainCamera.GetComponent<CameraShake>();
+            if (cs != null)
             {
-                StopCoroutine(cameraShakeCoroutine); // Para o tremor contínuo
-                cameraShake.StopShake(); // Garante que o tremor pare
+                StopCoroutine(cameraShakeCoroutine);
+                cs.StopShake();
             }
         }
 
-        // Reativar o movimento do jogador ao resolver o puzzle
-        if (playerController != null)
-        {
-            playerController.SetCanMove(true); // Permite o movimento
-        }
+        // reativa movimento
+        playerController?.SetCanMove(true);
 
-        // Abrir portas (destruir objetos com tag "Porta")
-        GameObject[] portas = GameObject.FindGameObjectsWithTag("Door");
-        foreach (GameObject porta in portas)
-        {
+        // abre portas
+        foreach (var porta in GameObject.FindGameObjectsWithTag("Door"))
             Destroy(porta);
-        }
 
-        // Destruir o objeto atual (o que contém o script)
+        // destrói o game object após completar o puzzle
         Destroy(gameObject);
     }
 
     void GenerateRandomSequence(int length)
     {
-        // Lista de teclas possíveis
         KeyCode[] possibleKeys = {
             KeyCode.A, KeyCode.B, KeyCode.C, KeyCode.D, KeyCode.E,
             KeyCode.F, KeyCode.G, KeyCode.H, KeyCode.I, KeyCode.J,
@@ -143,8 +190,6 @@ public class PuzzleSequenceManager : MonoBehaviour
             KeyCode.P, KeyCode.Q, KeyCode.R, KeyCode.S, KeyCode.T,
             KeyCode.U, KeyCode.V, KeyCode.W, KeyCode.X, KeyCode.Y, KeyCode.Z
         };
-
-        // Embaralha e seleciona as primeiras 'length' teclas
         sequence = possibleKeys.OrderBy(x => Random.value).Take(length).ToList();
     }
 }
