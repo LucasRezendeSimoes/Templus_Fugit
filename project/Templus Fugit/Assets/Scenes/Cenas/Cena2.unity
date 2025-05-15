@@ -9748,7 +9748,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
       propertyPath: coinCount
-      value: 5000
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
       propertyPath: hudPrefab
@@ -9758,6 +9758,14 @@ PrefabInstance:
       propertyPath: flameBallIcon
       value: 
       objectReference: {fileID: -6527882750063429571, guid: 1d04154192038724cba3b0c06b48344c, type: 3}
+    - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
+      propertyPath: damagePerEmber
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
+      propertyPath: baseFlameDamage
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

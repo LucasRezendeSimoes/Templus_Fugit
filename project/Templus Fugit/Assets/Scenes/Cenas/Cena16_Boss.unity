@@ -10180,7 +10180,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1419893069
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: a124f149610fc4545a2ce580819f0a3a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.3137255}
@@ -10619,7 +10619,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1419893069
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 2
   m_Sprite: {fileID: -1332049040, guid: 836ba81373ddf664c8a192783efe0ecd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -10684,13 +10684,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 679315467}
-  speed: 2.5
+  speed: 2.2
   AttackController: {fileID: 9100000, guid: 94828c757fc70584790a064c7ad208ef, type: 2}
   DeathController: {fileID: 9100000, guid: e713f1fff3936604dbee6fb6f49d02d8, type: 2}
   IdleController: {fileID: 9100000, guid: fb7c18385ea5d91469f79702a8044b3a, type: 2}
   RunController: {fileID: 9100000, guid: 89abbda68d8fc2243bfdb272f3d5cce5, type: 2}
   TakeHitController: {fileID: 9100000, guid: efdb3c6baececb14d982f3f293b9c5c8, type: 2}
-  vida: 1000
+  vida: 1200
   attackRange: 2
   DamageFlashTime: 0.2
   detectionRange: 10
@@ -11228,7 +11228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1856221230
 Transform:
   m_ObjectHideFlags: 0

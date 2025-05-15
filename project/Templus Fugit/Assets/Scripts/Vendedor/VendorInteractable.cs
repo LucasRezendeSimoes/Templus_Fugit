@@ -55,11 +55,7 @@ public class VendorInteractable : MonoBehaviour, IInteractable
 
     void Update()
     {
-        // Fecha diálogo com a tecla de fechamento após exibir todas as linhas
-        if (isDialogueActive && dlg != null && dlg.IsComplete && Input.GetKeyDown(dlg.closeKey))
-        {
-            CloseDialogue();
-        }
+
     }
 
     /// <summary>
@@ -69,6 +65,11 @@ public class VendorInteractable : MonoBehaviour, IInteractable
     {
         if (!isDialogueActive)
             ShowDialogue();
+    }
+
+    private void OnDialogueComplete()
+    {
+        CloseDialogue();  // Fecha o diálogo e abre a loja
     }
 
     private void ShowDialogue()
@@ -86,13 +87,11 @@ public class VendorInteractable : MonoBehaviour, IInteractable
         dialogueBox.SetActive(false);
         isDialogueActive = false;
 
-        // Após fechar diálogo, abre a loja
-        OpenShop();
-    }
+        // Libera o movimento do player antes de abrir a loja
+        pc?.SetCanMove(true);
 
-    private void OnDialogueComplete()
-    {
-        // Opcional: mostrar prompt visual de "Pressione F para continuar".
+        // Abre a loja
+        OpenShop();
     }
 
     private void OpenShop()

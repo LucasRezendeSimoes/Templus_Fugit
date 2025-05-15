@@ -8098,6 +8098,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 9017961013762377232, guid: 83d9a7cc04607cb4187f0d2a1408bc12, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 8dece1b157d21cc4bbc8c9b4829e8ebf, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

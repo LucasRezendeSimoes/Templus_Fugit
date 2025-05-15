@@ -245,6 +245,7 @@ public class Enemy : MonoBehaviour
     private void TryDropCoins()
     {
         if (coinPrefab == null) return;
+
         float roll = Random.value;
         int dropCount = 0;
         if (roll < twoCoinsChance)
@@ -252,13 +253,18 @@ public class Enemy : MonoBehaviour
         else if (roll < twoCoinsChance + oneCoinChance)
             dropCount = 1;
 
-        for (int i = 0; i < dropCount; i++)
+        if (dropCount > 0)
         {
-            Vector2 offset = Random.insideUnitCircle * 0.5f;
-            Vector3 spawnPos = transform.position + (Vector3)offset;
-            Instantiate(coinPrefab, spawnPos, Quaternion.identity);
+            // Direto para o player
+            var player = target.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                player.AddCoins(dropCount);
+                Debug.Log($"Inimigo deu {dropCount} moedas direto para o jogador.");
+            }
         }
     }
+
 
     void Die()
     {

@@ -7692,6 +7692,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Display
       objectReference: {fileID: 0}
+    - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
+      propertyPath: coinCount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8597,6 +8601,10 @@ PrefabInstance:
     - target: {fileID: 5728495640216990608, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: m_Name
       value: Puzzle
+      objectReference: {fileID: 0}
+    - target: {fileID: 5728495640216990608, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6237824800511185066, guid: 6915ff9f785566a46855b6bd93d0ca5c, type: 3}
       propertyPath: mainCamera

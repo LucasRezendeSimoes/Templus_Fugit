@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7524397239925361095}
   - component: {fileID: 2461763378856333980}
   - component: {fileID: 5400829357511689647}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Coin_reward
-  m_TagString: Untagged
+  m_TagString: Coins
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,9 +75,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1419893069
-  m_SortingLayer: 7
-  m_SortingOrder: 2
+  m_SortingLayerID: -1876205777
+  m_SortingLayer: 9
+  m_SortingOrder: 10
   m_Sprite: {fileID: -3338749442709606003, guid: 184ea185d9d501f4785e2ad688ac5396, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

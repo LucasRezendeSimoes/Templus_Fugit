@@ -9348,6 +9348,34 @@ PrefabInstance:
       propertyPath: lockpickUI
       value: 
       objectReference: {fileID: 487231075}
+    - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
+      propertyPath: FlameBallPrefab
+      value: 
+      objectReference: {fileID: 7533349701157117235, guid: 2ec50226892819c459c23c0c40ef2007, type: 3}
+    - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
+      propertyPath: possibleRewards.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
+      propertyPath: 'possibleRewards.Array.data[1]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
+      propertyPath: 'possibleRewards.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
+      propertyPath: 'possibleRewards.Array.data[3]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
+      propertyPath: 'possibleRewards.Array.data[4]'
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
+      propertyPath: 'possibleRewards.Array.data[5]'
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

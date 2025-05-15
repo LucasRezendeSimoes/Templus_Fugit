@@ -539,7 +539,7 @@ public class GameManager : MonoBehaviour
         previousScene = null;        // MUITO IMPORTANTE: impede a transição automática
         savedPositions.Clear();      // opcional: limpa todas as posições salvas
 
-        SceneManager.LoadScene("Cena2"); // reinicia o jogo
+        SceneManager.LoadScene("GameOver"); // reinicia o jogo
     }
 
 
@@ -650,6 +650,17 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(brokenWatchDuration);
         IsTimeStopped = false;
     }
+
+    public void PauseTime()
+    {
+        IsTimeStopped = true;
+    }
+
+    public void ResumeTime()
+    {
+        IsTimeStopped = false;
+    }
+
 
     private IEnumerator CloakNyxRoutine()
     {

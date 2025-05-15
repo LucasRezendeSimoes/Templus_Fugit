@@ -38,8 +38,13 @@ public class DialogueBox : MonoBehaviour
         index       = 0;
         IsComplete  = false;
         textComponent.text = string.Empty;
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.PauseTime();
+
         StartCoroutine(TypeLine());
     }
+
 
     void Update()
     {
@@ -80,9 +85,13 @@ public class DialogueBox : MonoBehaviour
         }
         else
         {
-            // Todas as linhas exibidas
             IsComplete = true;
+
+            if (GameManager.Instance != null)
+                GameManager.Instance.ResumeTime();
+
             onComplete?.Invoke();
         }
     }
+
 }

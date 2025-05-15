@@ -61,6 +61,9 @@ MonoBehaviour:
   brokenWatchDuration: 10
   cloakDuration: 5
   flameBallIcon: {fileID: -6527882750063429571, guid: 1d04154192038724cba3b0c06b48344c, type: 3}
+  baseFlameDamage: 30
+  damagePerEmber: 30
+  bamiEmberCount: 0
   coinCount: 0
   heartsUI:
   - {fileID: 0}
