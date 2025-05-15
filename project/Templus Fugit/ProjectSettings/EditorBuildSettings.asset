@@ -53,9 +53,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menus/Instructions.unity
     guid: 18ab7d9a452a427419d56e240b65bc8b
-  - enabled: 0
-    path: Assets/Scenes/Cenas/CenaSemNum.unity
-    guid: 6233624a998893d4ba70545eb6aba858
+  - enabled: 1
+    path: Assets/Scenes/Menus/TimeEnd.unity
+    guid: 0c0a36f32e1194f4d8927bf9424ca630
   - enabled: 1
     path: Assets/Scenes/Menus/GameOver.unity
     guid: f57cb73d1802f39459728736969e2956

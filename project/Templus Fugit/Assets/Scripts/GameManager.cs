@@ -13,7 +13,6 @@ public enum ItemType
     Hourglass     = 3,
     BrokenWatch   = 4,
     BamiEmber     = 5, 
-    // OracleEye     = 6,
 }
 
 public class GameManager : MonoBehaviour
@@ -141,7 +140,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-         // --- aplica volume salvo antes de tocar qualquer coisa ---
         float savedVol = PlayerPrefs.GetFloat("musicVolume", 1f);
         AudioListener.volume = savedVol;
         // Singleton padrão
@@ -150,7 +148,6 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // --- SETUP DO AUDIO ---
             for (int i = 0; i < 2; i++)
             {
                 var src = gameObject.AddComponent<AudioSource>();
@@ -168,8 +165,6 @@ public class GameManager : MonoBehaviour
                 _nextClipIndex = 1 % soundtrack.Length;
                 StartCoroutine(PlaylistCoroutine());
             }
-            // --- FIM SETUP AUDIO ---
-
             // Instancia o HUD apenas 1x
             if (!_hudCreated && hudPrefab != null)
             {
@@ -256,24 +251,6 @@ public class GameManager : MonoBehaviour
                     _powerIconUI = powerIconTf.GetComponent<Image>();
                 else
                     Debug.LogError("GameManager: não achei HUD/PowerPanel/PowerIcon no prefab!");
-                // // procura o CronosPowerPanel
-                // var cronosPanelTf = hud.transform.Find("HUD/CronosPowerPanel");
-                // if (cronosPanelTf == null)
-                //     Debug.LogError("GameManager: não achei HUD/CronosPowerPanel!");
-                // else {
-                //     _cronosSlotImages = new Image[2];
-                //     for (int i = 0; i < 2; i++) {
-                //         // cada slot tem a hierarquia CronosPowerPanel/Slot_{i+1}/Panel
-                //         var panel = cronosPanelTf.Find($"Slot_{i+1}/Panel");
-                //         if (panel != null)
-                //             _cronosSlotImages[i] = panel.GetComponent<Image>();
-                //         else
-                //             Debug.LogWarning($"GameManager: faltando Slot_{i+1}/Panel em CronosPowerPanel");
-                //         // inicializa vazio
-                //         if (_cronosSlotImages[i] != null)
-                //             _cronosSlotImages[i].sprite = emptySlotSprite;
-                //     }
-                // }
             }
         }
         else
@@ -418,7 +395,7 @@ public class GameManager : MonoBehaviour
         {
             currentTime -= Time.deltaTime;
             if (currentTime <= 0)
-                RestartGame();
+                RestartGameTimeEnd();
         }
 
         CheckSceneTransitions(SceneManager.GetActiveScene().name, thePlayer.transform.position);
@@ -522,24 +499,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // public void GameOver()
-    // {
-    //     lifes = 3; // Reset lifes when game is over
-    //     PlayerScore1 = 0; // Reset score when game is over
-    //     savedPositions.Clear(); // Limpa todas as posições salvas
-    //     SceneManager.LoadScene("GameOver");
-    // }
-
     public void RestartGame()
     {
         lifes = maxLifes;            // reset das vidas
         currentTime = gameTime;      // reset do tempo
 
         ResetRunData();              // limpa openedChests, etc.
-        previousScene = null;        // MUITO IMPORTANTE: impede a transição automática
-        savedPositions.Clear();      // opcional: limpa todas as posições salvas
+        previousScene = null;        // impede a transição automática
+        savedPositions.Clear();      // limpa todas as posições salvas
 
         SceneManager.LoadScene("GameOver"); // reinicia o jogo
+    }
+
+    public void RestartGameTimeEnd()
+    {
+        lifes = maxLifes;            // reset das vidas
+        currentTime = gameTime;      // reset do tempo
+
+        ResetRunData();              // limpa openedChests, etc.
+        previousScene = null;        // impede a transição automática
+        savedPositions.Clear();      // limpa todas as posições salvas
+
+        SceneManager.LoadScene("TimeEnd"); // reinicia o jogo
     }
 
 
@@ -551,7 +532,7 @@ public class GameManager : MonoBehaviour
         if (currentTime < 0)
         {
             currentTime = 0; // Garante que o tempo não fique negativo
-            RestartGame(); // Reinicia o jogo se o tempo acabar
+            RestartGameTimeEnd(); // Reinicia o jogo se o tempo acabar
         }
     }
 
@@ -752,16 +733,6 @@ public class GameManager : MonoBehaviour
             case ItemType.BamiEmber: // brasa de Bami
                 GrantFlamePower(_flameBallPrefab);
                 return; // não remove do inventário
-            // case ItemType.OracleEye:
-            //     SetCronosPowerSlot(0, ItemType.OracleEye);
-            //     RemoveInventoryItem(slotIndex);
-            //     return;
-
-            // case ItemType.CronosMark:   // assim que definir essa enum
-            //     Debug.Log("Usou Marca de Cronos!");
-            //     SetCronosPowerSlot(1, ItemType.CronosMark);
-            //     RemoveInventoryItem(slotIndex);
-            //     return;
         }
 
         // remove do inventário

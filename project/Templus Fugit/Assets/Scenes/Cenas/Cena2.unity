@@ -9747,6 +9747,10 @@ PrefabInstance:
       value: Display
       objectReference: {fileID: 0}
     - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
+      propertyPath: gameTime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
       propertyPath: coinCount
       value: 0
       objectReference: {fileID: 0}
