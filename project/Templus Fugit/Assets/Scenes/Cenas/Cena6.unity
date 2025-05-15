@@ -7741,6 +7741,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 536094888}
     m_Modifications:
     - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: vida
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 1063463495}
@@ -7810,6 +7814,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 536094888}
     m_Modifications:
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: vida
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
       propertyPath: target
       value: 
@@ -8950,7 +8958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
       propertyPath: coinReward
-      value: 300
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 7920299568409997181, guid: 9adf75f3f3493a148b61a30b03276a3d, type: 3}
       propertyPath: difficulty
@@ -9337,6 +9345,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 113298009001021910, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
   m_PrefabInstance: {fileID: 1945377576}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1945377578 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4686939488683363333, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+  m_PrefabInstance: {fileID: 1945377576}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2001797838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9389,6 +9408,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Display
       objectReference: {fileID: 0}
+    - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
+      propertyPath: flashPanel
+      value: 
+      objectReference: {fileID: 1945377578}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

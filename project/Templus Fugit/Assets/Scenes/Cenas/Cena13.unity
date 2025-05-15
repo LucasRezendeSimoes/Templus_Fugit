@@ -7958,6 +7958,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5964941351472995577, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
   m_PrefabInstance: {fileID: 822339648}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &822339650 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4686939488683363333, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+  m_PrefabInstance: {fileID: 822339648}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &822339651 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6461132374221272284, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+  m_PrefabInstance: {fileID: 822339648}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &883159490
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8010,6 +8026,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Display
       objectReference: {fileID: 0}
+    - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
+      propertyPath: flashPanel
+      value: 
+      objectReference: {fileID: 822339650}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8197,6 +8217,18 @@ PrefabInstance:
       value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 624518606}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: oneCoinChance
+      value: 0.239
+      objectReference: {fileID: 0}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: twoCoinsChance
+      value: 0.052
+      objectReference: {fileID: 0}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
       propertyPath: healthBarPrefab
       value: 
       objectReference: {fileID: 1280338162}
@@ -8380,6 +8412,18 @@ PrefabInstance:
       value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 624518606}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: oneCoinChance
+      value: 0.239
+      objectReference: {fileID: 0}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: twoCoinsChance
+      value: 0.052
+      objectReference: {fileID: 0}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
       propertyPath: healthBarPrefab
       value: 
       objectReference: {fileID: 1280338162}
@@ -8494,6 +8538,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1173312576}
     - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
+      propertyPath: dialogueBox
+      value: 
+      objectReference: {fileID: 822339651}
+    - target: {fileID: 7383131714480364721, guid: 94fae3a794484554ca09a3038be10634, type: 3}
       propertyPath: 'lines.Array.data[0]'
       value: Ao fundo de uma galeria, senti um sopro gelado passar
       objectReference: {fileID: 0}
@@ -8522,6 +8570,18 @@ PrefabInstance:
     - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
       propertyPath: vida
       value: 700
+      objectReference: {fileID: 0}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 624518606}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: oneCoinChance
+      value: 0.239
+      objectReference: {fileID: 0}
+    - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
+      propertyPath: twoCoinsChance
+      value: 0.052
       objectReference: {fileID: 0}
     - target: {fileID: 3944076920054736814, guid: 69c63986837591f4dbd35ba9ed0a8c2a, type: 3}
       propertyPath: healthBarPrefab

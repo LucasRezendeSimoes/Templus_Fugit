@@ -24,7 +24,8 @@ public class BossController : MonoBehaviour
     public RuntimeAnimatorController TakeHitController;
 
     [Header("Parâmetros de Combate")]
-    public int vida = 100;
+    public int vida;
+    public int maxVida = 5000;
     private bool canBeHit = true;
     public float attackRange = 1.5f;
     public float DamageFlashTime = 0.2f;
@@ -39,6 +40,8 @@ public class BossController : MonoBehaviour
 
     void Start()
     {
+        vida = maxVida; // inicia com vida cheia
+
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
@@ -56,11 +59,11 @@ public class BossController : MonoBehaviour
         // Atualiza a barra de saúde
         if (vida > 0)
         {
-            healthBar.SetHealthPercent((float)vida / 100);
+            healthBar.SetHealthPercent((float)vida / maxVida);
         }
         else
         {
-            healthBar.gameObject.SetActive(false); // Desativa a barra de saúde se o Boss estiver morto
+            healthBar.gameObject.SetActive(false);
         }
 
         // Se o relógio está parado, nem processa nada

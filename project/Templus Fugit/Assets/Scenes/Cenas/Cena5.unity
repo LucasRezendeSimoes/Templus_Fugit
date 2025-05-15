@@ -172,6 +172,10 @@ PrefabInstance:
       value: Display
       objectReference: {fileID: 0}
     - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
+      propertyPath: flashPanel
+      value: 
+      objectReference: {fileID: 301658474}
+    - target: {fileID: 8590672840437002575, guid: ffe7689f4e4ca344cb7992b184aef685, type: 3}
       propertyPath: flameBallIcon
       value: 
       objectReference: {fileID: -6527882750063429571, guid: 1d04154192038724cba3b0c06b48344c, type: 3}
@@ -4885,6 +4889,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+--- !u!114 &301658474 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4686939488683363333, guid: 3a74c6ea281482f40a2b18f452de7ffa, type: 3}
+  m_PrefabInstance: {fileID: 301658473}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &387711308
 GameObject:
   m_ObjectHideFlags: 0

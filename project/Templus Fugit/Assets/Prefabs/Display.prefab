@@ -47,7 +47,9 @@ MonoBehaviour:
   hudPrefab: {fileID: 6609753434136631856, guid: 1f44b881201bdcc4fbbb220c7d3319b8, type: 3}
   layout: {fileID: 11400000, guid: f14494d8ac372224787d94ea0e479745, type: 2}
   maxLifes: 3
-  gameTime: 360
+  gameTime: 300
+  flashPanel: {fileID: 0}
+  flashDuration: 0.5
   inventorySize: 5
   emptySlotSprite: {fileID: 8144212348953700139, guid: ca4632c7544d76946a69c0a3e8773d27, type: 3}
   itemIcons:

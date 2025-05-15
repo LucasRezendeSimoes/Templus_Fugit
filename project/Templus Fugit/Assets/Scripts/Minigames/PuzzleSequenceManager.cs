@@ -115,6 +115,14 @@ public class PuzzleSequenceManager : MonoBehaviour
     void Update()
     {
         if (!puzzleStarted || puzzleCompleted) return;
+
+        // Se o tempo zerou, reinicia o jogo
+        if (GameManager.Instance.IsTimeUp())
+        {
+            GameManager.Instance.RestartGameTimeEnd();
+            return;
+        }
+
         HandleInput();
     }
 

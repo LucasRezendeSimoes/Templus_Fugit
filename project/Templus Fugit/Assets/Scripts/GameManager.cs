@@ -35,8 +35,14 @@ public class GameManager : MonoBehaviour
     public static int lifes = 3;              // Vidas do jogador
     public int maxLifes = 3;                  // Vidas máximas do jogador
 
+    [Header("Tempo do Jogo")]
     public float gameTime = 300f;             // Tempo total do jogo em segundos
-    private float currentTime;                // Tempo restante
+    public float currentTime;                // Tempo restante
+
+    [Header("Flash Bang Effect")]
+    public Image flashPanel;
+    public float flashDuration = 0.2f;
+    private bool _timeUpTriggered = false;
 
     [Header("Inventário")]
     public int inventorySize = 5;             // quantos slots
@@ -66,9 +72,9 @@ public class GameManager : MonoBehaviour
     private Image _powerIconUI;
     private Image[] _cronosSlotImages;
     [Tooltip("Dano base da Flame Ball")]
-    [SerializeField] private int baseFlameDamage = 10;
+    [SerializeField] private int baseFlameDamage = 30;
     [Tooltip("Dano adicional por Brasa de Bami")]
-    [SerializeField] private int damagePerEmber = 10;
+    [SerializeField] private int damagePerEmber = 30;
     public int bamiEmberCount = 0;
     
     [Header("Moedas")]
@@ -260,6 +266,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public bool IsTimeUp()
+    {
+        return currentTime <= 0;
+    }
+
     private IEnumerator PlaylistCoroutine()
     {
         while (true)
@@ -331,6 +342,13 @@ public class GameManager : MonoBehaviour
         PositionPlayerOnSceneLoad();
         UpdateCoinsUI();
         UpdateTimeUI();
+
+        // Inicializa painel de flash
+        if (flashPanel != null)
+        {
+            flashPanel.gameObject.SetActive(false);
+            flashPanel.color = new Color(1,1,1,0);
+        }
     }   
 
     // Salva a posição atual do jogador no dicionário
@@ -374,28 +392,24 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Impede a transição de cena enquanto o jogador está interagindo
         if (isInteracting) return;
-
         if (thePlayer == null)
         {
             thePlayer = GameObject.FindGameObjectWithTag("Player");
-            if (thePlayer == null)
-            {
-                return; // ainda não está disponível, evita NullReference
-            }
+            if (thePlayer == null) return;
         }
-
         UpdateHeartsUI();
         UpdateCoinsUI();
         UpdateTimeUI();
 
-        // Verifica se a cena atual é "Cena2" ou posterior antes de atualizar o tempo
         if (!IsTimeStopped && (SceneManager.GetActiveScene().name == "Cena2" || IsSceneAfter("Cena2")))
         {
             currentTime -= Time.deltaTime;
             if (currentTime <= 0)
-                RestartGameTimeEnd();
+            {
+                currentTime = 0;
+                TriggerTimeEnd();
+            }
         }
 
         CheckSceneTransitions(SceneManager.GetActiveScene().name, thePlayer.transform.position);
@@ -528,12 +542,37 @@ public class GameManager : MonoBehaviour
 
     public void ReduceTime(float penalty)
     {
-        currentTime -= penalty; // Subtrai o tempo de penalidade
+        currentTime -= penalty;
         if (currentTime < 0)
         {
-            currentTime = 0; // Garante que o tempo não fique negativo
-            RestartGameTimeEnd(); // Reinicia o jogo se o tempo acabar
+            currentTime = 0;
+            TriggerTimeEnd();
         }
+    }
+
+    private void TriggerTimeEnd()
+    {
+        if (_timeUpTriggered) return;
+        _timeUpTriggered = true;
+        StartCoroutine(FlashAndEnd());
+    }
+
+    private IEnumerator FlashAndEnd()
+    {
+        if (flashPanel != null)
+        {
+            flashPanel.gameObject.SetActive(true);
+            float t = 0f;
+            while (t < flashDuration)
+            {
+                t += Time.unscaledDeltaTime;
+                float a = Mathf.Clamp01(t / flashDuration);
+                flashPanel.color = new Color(1,1,1,a);
+                yield return null;
+            }
+        }
+        yield return null;
+        RestartGameTimeEnd();
     }
 
     public void SetInteracting(bool interacting)
@@ -713,9 +752,17 @@ public class GameManager : MonoBehaviour
         switch (item)
         {
             case ItemType.HealthPotion: // pocao de vida
-                AddLife(2);   // recupera 2 corações
+                int maxMaxLifes = 10; // limite arbitrário
+                if (maxLifes < maxMaxLifes)
+                {
+                    maxLifes += 1;
+                    lifes += 1;
+                }
+                else
+                {
+                    AddLife(2);
+                }
                 break;
-            // case ItemType.Key: … etc
             case ItemType.Hourglass: // ampulheta
             // adiciona tempo 
                 currentTime += hourglassBonusTime;
