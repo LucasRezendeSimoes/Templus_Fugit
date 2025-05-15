@@ -524,7 +524,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -347, y: 200}
+  m_AnchoredPosition: {x: -332.5, y: 200}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &398235938
@@ -547,8 +547,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lucas Rezende Sim\xF5es\nRA: 24.122.028-4\nRuan Pastrelo Turola\nRA: 24.122.050-8\nAdriel
-    Henrique Foppa Lima\nRA: 24.122.096-1\nIgor Augusto Fiorini Rossi\nRA: 24.122.023-5"
+  m_text: "Mapa - https://www.spriters-resource.com/snes/starocean/sheet/54480/\nBoss
+    - https://assetstore.unity.com/packages/2d/characters/evil-wizard-2-284501\nInimigos
+    - https://assetstore.unity.com/packages/2d/characters/2d-skeleton-isometric-pixelart-character-254596\nM\xFAsica
+    - https://assetstore.unity.com/packages/audio/music/orchestral/fight-town-rpg-soundtrack-pack-2-308923\nSom
+    de Passos - https://assetstore.unity.com/packages/audio/ambient/noise/steps-217791\nBackGround
+    e itens - ChatGPT\nSuzan - https://bossnelnel.itch.io/8-direction-top-down-character-sprites\nBola
+    de fogo - https://nyknck.itch.io/pixelarteffectfx017\nSom de Ba\xFA abrindo -
+    https://www.myinstants.com/pt/instant/zelda-chest-1234/\nSom de Espada - https://uppbeat.io/sfx/sword-impact-metal-hit/7000/22895"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5d7265cb3eb1a2f4f936170031d905a7, type: 2}
   m_sharedMaterial: {fileID: 3321319116616167326, guid: 5d7265cb3eb1a2f4f936170031d905a7, type: 2}
@@ -575,10 +581,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 35.45
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -613,7 +619,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -666.72437, w: -54.11731}
+  m_margin: {x: -361.6737, y: -29.726562, z: -912.7947, w: -407.53366}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -804,7 +810,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -333, y: 350}
-  m_SizeDelta: {x: 500, y: 50}
+  m_SizeDelta: {x: 500, y: 85.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1198880018
 MonoBehaviour:
